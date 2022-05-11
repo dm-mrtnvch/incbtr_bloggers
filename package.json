@@ -1,0 +1,8 @@
+{
+  "name": "bloggers",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dm-mrtnvch/incbtr_bloggers.git",
+  "author": "dm-mrtnvch <dmvshn@gmail.com>",
+  "license": "MIT"
+}
