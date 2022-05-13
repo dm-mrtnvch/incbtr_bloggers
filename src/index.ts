@@ -12,15 +12,13 @@ export interface Iblogger {
     youtubeUrl: string;
 }
 
-export let bloggers: Iblogger[] = [
+let bloggers: Iblogger[] = [
     {id: 1, name: 'raz', youtubeUrl: 'https://www.youtube.com/raz'},
     {id: 2, name: 'dva', youtubeUrl: 'https://www.youtube.com/dva'},
     {id: 3, name: 'tri', youtubeUrl: 'https://www.youtube.com/tri'},
     {id: 4, name: 'che', youtubeUrl: 'https://www.youtube.com/che'},
     {id: 5, name: 'piat', youtubeUrl: 'https://www.youtube.com/piat'}
 ]
-
-
 
 app.get('/', (req, res) => {
     res.send('simple get request')
@@ -44,13 +42,14 @@ app.post('/bloggers', (req: Request, res: Response) => {
         return
     }
     const newBlogger: Iblogger = {
-        id: ++bloggers.length,
+        id: new Date().valueOf(),
         name: req.body.name,
         youtubeUrl: req.body.youtubeUrl
     }
-    bloggers = [...bloggers, newBlogger]
+    bloggers.push(newBlogger)
     res.status(201).send(bloggers)
 })
+
 app.put('/bloggers/:id', (req: Request, res: Response) => {
      if (!req.body.name || !req.body.youtubeUrl) {
         res.send(400)
