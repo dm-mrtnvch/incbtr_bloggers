@@ -49,7 +49,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
         youtubeUrl: req.body.youtubeUrl
     }
     bloggers = [...bloggers, newBlogger]
-    res.status(201).send([...bloggers, newBlogger])
+    res.status(201).send(bloggers)
 })
 app.put('/bloggers/:id', (req: Request, res: Response) => {
      if (!req.body.name || !req.body.youtubeUrl) {
