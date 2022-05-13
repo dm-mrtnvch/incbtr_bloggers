@@ -38,7 +38,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
         youtubeUrl: req.body.youtubeUrl
     }
     bloggers.push(newBlogger)
-    res.status(201).send(bloggers)
+    res.status(201).send(newBlogger)
 })
 
 app.get('/bloggers/:id', (req: Request, res: Response) => {
