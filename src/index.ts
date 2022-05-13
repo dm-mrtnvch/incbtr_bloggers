@@ -1,10 +1,26 @@
 import express, {Request, Response} from 'express'
 import bodyParser from "body-parser";
-import {bloggers, Iblogger} from "./mocks/db";
+// import {bloggers, Iblogger} from "./mocks/db";
 
 const app = express()
 app.use(bodyParser())
 const PORT = process.env.PORT || 4000
+
+export interface Iblogger {
+    id:         number;
+    name:       string;
+    youtubeUrl: string;
+}
+
+export let bloggers: Iblogger[] = [
+    {id: 1, name: 'raz', youtubeUrl: 'https://www.youtube.com/raz'},
+    {id: 2, name: 'dva', youtubeUrl: 'https://www.youtube.com/dva'},
+    {id: 3, name: 'tri', youtubeUrl: 'https://www.youtube.com/tri'},
+    {id: 4, name: 'che', youtubeUrl: 'https://www.youtube.com/che'},
+    {id: 5, name: 'piat', youtubeUrl: 'https://www.youtube.com/piat'}
+]
+
+
 
 app.get('/', (req, res) => {
     res.send('simple get request')
@@ -32,6 +48,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
         name: req.body.name,
         youtubeUrl: req.body.youtubeUrl
     }
+    bloggers = [...bloggers, newBlogger]
     res.status(201).send([...bloggers, newBlogger])
 })
 app.put('/bloggers/:id', (req: Request, res: Response) => {
