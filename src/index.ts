@@ -23,7 +23,7 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
     }
 })
 app.post('/bloggers', (req: Request, res: Response) => {
-    if (!req.body.name || !req.body.youtubeUrl) {
+    if (!req.body?.name?.trim() ||  !req.body?.youtubeUrl?.trim()) {
         res.status(400).send({"errorsMessages": [{"message": "string", "field": "string"}], "resultCode": 0})
         return
     }
@@ -35,7 +35,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
     res.status(201).send([...bloggers, newBlogger])
 })
 app.put('/bloggers/:id', (req: Request, res: Response) => {
-    if (!req.body.name || !req.body.youtubeUrl) {
+     if (!req.body.name || !req.body.youtubeUrl) {
         res.send(400)
     }
     const bloggerId = +req.params.id
