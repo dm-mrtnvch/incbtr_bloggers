@@ -42,7 +42,7 @@ app.post('/bloggers', (req: Request, res: Response) => {
         return
     }
     const newBlogger: Iblogger = {
-        id: new Date().valueOf(),
+        id: bloggers.length + 1,
         name: req.body.name,
         youtubeUrl: req.body.youtubeUrl
     }
