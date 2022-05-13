@@ -47,7 +47,7 @@ app.get('/bloggers/:id', (req: Request, res: Response) => {
     if (blogger) {
         res.status(200).send(blogger)
     } else {
-        res.send(401)
+        res.send(bloggerId)
     }
 })
 
