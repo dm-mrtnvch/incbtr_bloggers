@@ -1,11 +1,19 @@
 import express, {Request, Response} from 'express'
 import bodyParser from "body-parser";
-import {bloggers, Iblogger} from "./mocks/db";
+import {Iblogger} from "./interfaces/blogger";
 
 const app = express()
 app.use(bodyParser())
 const PORT = process.env.PORT || 4000
 const error = {"errorsMessages": [{"message": "string", "field": "string"}], "resultCode": 0}
+
+export let bloggers: Iblogger[] = [
+    {id: 1, name: 'raz', youtubeUrl: 'https://www.youtube.com/raz'},
+    {id: 2, name: 'dva', youtubeUrl: 'https://www.youtube.com/dva'},
+    {id: 3, name: 'tri', youtubeUrl: 'https://www.youtube.com/tri'},
+    {id: 4, name: 'che', youtubeUrl: 'https://www.youtube.com/che'},
+    {id: 5, name: 'piat', youtubeUrl: 'https://www.youtube.com/piat'}
+]
 
 
 app.get('/', (req, res) => {
