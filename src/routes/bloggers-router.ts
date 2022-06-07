@@ -28,8 +28,12 @@ bloggersRouter.post('', (req, res) => {
 bloggersRouter.put('/:id', (req, res) => {
     const id = Number(req.params.id)
     const {name, youtubeUrl} = req.body
-    const updatedBlogger = bloggersRepository.updateBlogger(id,name, youtubeUrl)
-    res.send(updatedBlogger)
+    const isUpdated = bloggersRepository.updateBlogger(id,name, youtubeUrl)
+    if(isUpdated){
+        res.send(204)
+    } else {
+        res.send(404)
+    }
 })
 
 bloggersRouter.delete('/:id', (req, res) => {
