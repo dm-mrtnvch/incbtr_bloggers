@@ -6,7 +6,6 @@ import {bloggersRouter} from "./routes/bloggers-router";
 const app = express()
 app.use(bodyParser())
 const PORT = process.env.PORT || 5000
-const error = {"errorsMessages": [{"message": "string", "field": "string"}], "resultCode": 0}
 
 app.get('', (req, res) => {
     res.send('simple get request completed')

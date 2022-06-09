@@ -1,18 +1,17 @@
 import {bloggers} from "../db/mock_data";
 import {IBlogger} from "../interfaces";
-import {findBloggerById} from "../helpers/bloggers-helper";
+import {findBloggerById} from "../helpers/utils";
 
 export const bloggersRepository = {
     getAllBloggers(): IBlogger[] {
         return bloggers
     },
-    getBloggerById(id: number): IBlogger | boolean {
+    getBloggerById(id: number)/*: IBlogger | boolean*/ {
         const blogger = findBloggerById(bloggers, id)
         if (blogger) {
             return blogger
-        } else {
-            return false
         }
+        return false
     },
     createBlogger(name: string, youtubeUrl: string){
         const newBlogger: IBlogger = {

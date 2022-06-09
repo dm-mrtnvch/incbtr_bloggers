@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
+import {error} from "../config";
 
 export const bloggersRouter = Router()
 
@@ -13,23 +14,27 @@ bloggersRouter.get('/:id', (req, res) => {
     const blogger = bloggersRepository.getBloggerById(id)
     if (blogger) {
         res.json(blogger)
-        return
     } else {
         res.status(404)
+        return
     }
 })
 
 bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
-    const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
-     res.status(201).json(newBlogger)
+    if(name && youtubeUrl){
+        const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
+        res.status(201).json(newBlogger)
+        return
+    }
+    res.status(400).send(error)
 })
 
 bloggersRouter.put('/:id', (req, res) => {
     const id = Number(req.params.id)
     const {name, youtubeUrl} = req.body
-    const isUpdated = bloggersRepository.updateBlogger(id,name, youtubeUrl)
-    if(isUpdated){
+    const isUpdated = bloggersRepository.updateBlogger(id, name, youtubeUrl)
+    if (isUpdated) {
         res.send(204)
     } else {
         res.send(404)
