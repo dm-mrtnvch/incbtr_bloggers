@@ -13,12 +13,13 @@ postsRouter.get('', (req, res) => {
 })
 
 postsRouter.get('/:id', (req, res) => {
-    const postId = Number(req.params.id)
-    const post = postsRepository.getPostById(postId)
+    const id = Number(req.params.id)
+    const post = postsRepository.getPostById(id)
     if (post) {
         res.json(post)
+        return
     } else {
-        res.send(404)
+        res.sendStatus(404)
     }
 })
 
@@ -63,7 +64,8 @@ postsRouter.delete('/:id', (req, res) => {
     const id = Number(req.params.id)
     const isDeleted = postsRepository.deletePostById(id)
     if (isDeleted) {
-        res.send(204)
+        res.sendStatus(204)
+        return
     } else {
         res.send(404)
     }

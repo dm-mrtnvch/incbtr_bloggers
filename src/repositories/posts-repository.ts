@@ -39,8 +39,8 @@ export const postsRepository = {
         const post = findObjectById(posts, id)
         if(post) {
             const postIndex = posts.findIndex(b => b.id === id)
-            const filteredPosts = bloggers.splice(postIndex, 1)
-            return filteredPosts.length < bloggers.length
+            const filteredPosts = posts.splice(postIndex, 1)
+            return filteredPosts.length < posts.length
         }
         return false
     }
