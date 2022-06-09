@@ -24,10 +24,10 @@ bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
     if(name.trim().length > 0 && youtubeUrl.trim().length > 0){
         const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
-        res.sendStatus(201).json(newBlogger)
+        res.status(201).json(newBlogger)
         return
     }
-    res.sendStatus(400).send(error)
+    res.status(400).send(error)
 })
 
 bloggersRouter.put('/:id', (req, res) => {
