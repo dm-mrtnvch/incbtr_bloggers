@@ -1,13 +1,13 @@
 import {bloggers} from "../db/mock_data";
 import {IBlogger} from "../interfaces";
-import {findBloggerById} from "../helpers/utils";
+import {findBloggerById, findObjectById} from "../helpers/utils";
 
 export const bloggersRepository = {
     getAllBloggers(): IBlogger[] {
         return bloggers
     },
     getBloggerById(id: number)/*: IBlogger | boolean*/ {
-        const blogger = findBloggerById(bloggers, id)
+        const blogger = findObjectById(bloggers, id)
         if (blogger) {
             return blogger
         }
@@ -24,7 +24,7 @@ export const bloggersRepository = {
 
     },
     updateBlogger(id: number, name: string, youtubeUrl: string){
-        const blogger = findBloggerById(bloggers, id)
+        const blogger = findObjectById(bloggers, id)
         if(blogger){
             blogger.name = name
             blogger.youtubeUrl = youtubeUrl
@@ -35,7 +35,7 @@ export const bloggersRepository = {
 
     },
     deleteBloggerById(id: number): boolean{
-        const blogger = findBloggerById(bloggers, id)
+        const blogger = findObjectById(bloggers, id)
         if(blogger) {
             const bloggerIndex = bloggers.findIndex(b => b.id === id)
             const filteredBloggers = bloggers.splice(bloggerIndex, 1)

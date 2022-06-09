@@ -1,1 +1,1 @@
-export const error = {"errorsMessages": [{"message": "string", "field": "string"}], "resultCode": 0}
+export const error = {"errorsMessages": [{"message": "string", "field": "string"}]}

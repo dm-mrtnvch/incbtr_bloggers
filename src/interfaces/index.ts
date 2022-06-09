@@ -1,7 +1,6 @@
 export interface IUnique {
     id: number
 }
-export type Test = IBlogger | IPost
 
 export interface IBlogger extends IUnique {
     name: string
@@ -16,7 +15,6 @@ export interface IPost extends IUnique {
     bloggerName: string
 }
 
-export interface IPostViewModel extends IPost, IUnique {
-    bloggerName: string
-}
 
+/////////////////////////////////////
+export type Test = IBlogger | IPost

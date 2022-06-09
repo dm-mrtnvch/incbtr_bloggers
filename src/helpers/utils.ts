@@ -9,8 +9,8 @@ export const findPostById = (posts: IPost[], id: number) => {
 }
 
 
-export function findObjectById (blabla: Test[], id: number){
-    return blabla.find(el => el.id === id)
+export function findObjectById<T extends {id: number}>(array:T[], id: number): T | null{
+    return array.find(el => el.id === id) || null
 }
 
 function foo<T>(x: T): T {

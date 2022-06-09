@@ -22,12 +22,12 @@ bloggersRouter.get('/:id', (req, res) => {
 
 bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
-    if(name && youtubeUrl){
+    if(name.trim().length > 0 && youtubeUrl.trim().length > 0){
         const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
-        res.status(201).json(newBlogger)
+        res.sendStatus(201).json(newBlogger)
         return
     }
-    res.status(400).send(error)
+    res.sendStatus(400).send(error)
 })
 
 bloggersRouter.put('/:id', (req, res) => {
@@ -46,7 +46,9 @@ bloggersRouter.delete('/:id', (req, res) => {
     const isDeleted = bloggersRepository.deleteBloggerById(id)
     if (isDeleted) {
         res.send(204)
+        console.log('sssfsf')
     } else {
+        console.log('ss')
         res.send(404)
     }
 })

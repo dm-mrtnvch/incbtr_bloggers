@@ -1,11 +1,9 @@
 import {Request, Response, Router} from "express";
-import {IBlogger, IPost, IPostViewModel} from "../interfaces";
-import {bloggers, posts} from "../db/mock_data";
+import {IPost} from "../interfaces";
+import {posts} from "../db/mock_data";
 import {postsRepository} from "../repositories/posts-repository";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {error} from "../config";
-import {findPostById} from "../helpers/utils";
-import {bloggersRouter} from "./bloggers-router";
 
 export const postsRouter = Router()
 
@@ -27,7 +25,11 @@ postsRouter.get('/:id', (req, res) => {
 postsRouter.post('', (req: Request, res: Response) => {
     const {title, shortDescription, content, bloggerId} = req.body
 
-    const blogger: any = bloggersRepository.getBloggerById(bloggerId)
+    const blogger = bloggersRepository.getBloggerById(bloggerId)
+    if(!blogger){
+        res.status(400).send(error)
+        return
+    }
     const bloggerName = blogger?.name
 
     if (title && shortDescription && content && bloggerId) {
@@ -51,9 +53,9 @@ postsRouter.put('/:id', (req, res) => {
     const {title, shortDescription, content, bloggerId} = req.body
     const isUpdated = postsRepository.updatePost(id, title, shortDescription, content, bloggerId)
     if (isUpdated) {
-        res.send(204)
+        res.sendStatus(204)
     } else {
-        res.send(404)
+        res.sendStatus(404)
     }
 })
 

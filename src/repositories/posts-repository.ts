@@ -1,19 +1,7 @@
 import {bloggers, posts} from "../db/mock_data";
-import {IPost, IPostViewModel} from "../interfaces";
-import {findBloggerById, findPostById} from "../helpers/utils";
+import {IPost} from "../interfaces";
+import {findBloggerById, findObjectById, findPostById} from "../helpers/utils";
 
-// const postsWithBloggerName = (post: IPost): IPostViewModel => {
-//     const {id, title, content, shortDescription, bloggerId} = post
-//     const bloggerName: any = findBloggerById(bloggers, id)?.name
-//     return {
-//         id,
-//         title,
-//         content,
-//         shortDescription,
-//         bloggerId,
-//         bloggerName
-//     }
-// }
 
 export const postsRepository = {
     getAllPosts() {
@@ -21,7 +9,7 @@ export const postsRepository = {
 
     },
     getPostById(id: number): IPost | boolean {
-        const post = findPostById(posts, id)
+        const post = findObjectById(posts, id)
         if (post) {
             return post
         } else {
@@ -30,7 +18,7 @@ export const postsRepository = {
 
     },
     createPost(id: number) {
-        const blogger = findBloggerById(bloggers, id)
+        const blogger = findObjectById(bloggers, id)
         if (blogger) {
 
         }
@@ -48,7 +36,7 @@ export const postsRepository = {
         }
     },
     deletePostById(id: number): boolean{
-        const post = findPostById(posts, id)
+        const post = findObjectById(posts, id)
         if(post) {
             const postIndex = posts.findIndex(b => b.id === id)
             const filteredPosts = bloggers.splice(postIndex, 1)
