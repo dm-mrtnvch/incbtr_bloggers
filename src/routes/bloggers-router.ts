@@ -11,22 +11,17 @@ bloggersRouter.get('', (req, res) => {
 
 bloggersRouter.get('/:id', (req, res) => {
     const id = Number(req.params.id)
-    if (!id) {
-        res.status(404)
-        return
-    }
     const blogger = bloggersRepository.getBloggerById(id)
     if (blogger) {
         res.json(blogger)
     } else {
-        res.status(404)
-        return
+        res.sendStatus(404)
     }
 })
 
 bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
-    if (name.trim().length > 0 && youtubeUrl.trim().length > 0) {
+    if(name.trim().length > 0 && youtubeUrl.trim().length > 0){
         const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
         res.status(201).json(newBlogger)
         return
@@ -36,28 +31,22 @@ bloggersRouter.post('', (req, res) => {
 
 bloggersRouter.put('/:id', (req, res) => {
     const id = Number(req.params.id)
-    if (!id) {
-        res.status(404)
-        return
-    }
     const {name, youtubeUrl} = req.body
     const isUpdated = bloggersRepository.updateBlogger(id, name, youtubeUrl)
     if (isUpdated) {
-        res.send(204)
+        res.sendStatus(204)
+        return
     } else {
-        res.send(404)
+        res.sendStatus(404)
     }
 })
 
 bloggersRouter.delete('/:id', (req, res) => {
     const id = Number(req.params.id)
-    if (!id) {
-        res.status(404)
-        return
-    }
     const isDeleted = bloggersRepository.deleteBloggerById(id)
     if (isDeleted) {
         res.sendStatus(204)
+        return
     } else {
         res.sendStatus(404)
     }
