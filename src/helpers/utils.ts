@@ -22,6 +22,14 @@ export function validURL(str: string) {
         '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
     return !!pattern.test(str);
 }
+export function validName(name: string){
+    let regName = /^[a-zA-Z]+ [a-zA-Z]+$/
+    if(!regName.test(name)){
+        return false
+    } else {
+        return true
+    }
+}
 
 function foo<T>(x: T): T {
     return x;

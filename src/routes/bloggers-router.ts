@@ -1,7 +1,7 @@
 import {Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {error} from "../config";
-import {validURL} from "../helpers/utils";
+import {validName, validURL} from "../helpers/utils";
 
 export const bloggersRouter = Router()
 
@@ -29,45 +29,49 @@ bloggersRouter.post('', (req, res) => {
     }
 
     const isValidUrl = validURL(youtubeUrl)
-    if(!isValidUrl){
+    if (!isValidUrl) {
         console.log(isValidUrl)
         errors.errorsMessages.push({message: 'incorrect field', field: "youtubeUrl"});
-
     }
-    if(errors.errorsMessages.length > 0){
+    const isValidName = validName(name)
+    if (!isValidName) {
+        console.log(isValidName)
+        errors.errorsMessages.push({message: 'incorrect field', field: "name"});
+    }
+
+    if (errors.errorsMessages.length > 0) {
         res.status(400).json(errors)
         return
     }
 
-        if (name.trim().length > 0 && youtubeUrl.trim().length > 0) {
-            const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
-            res.status(201).json(newBlogger)
-            return
-        }
-        res.status(400).send(error)
+    if (name.trim().length > 0 && youtubeUrl.trim().length > 0) {
+        const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
+        res.status(201).json(newBlogger)
+        return
     }
-)
+    res.status(400).send(error)
+})
 
-    bloggersRouter.put('/:id', (req, res) => {
-        const id = Number(req.params.id)
-        const {name, youtubeUrl} = req.body
-        const isUpdated = bloggersRepository.updateBlogger(id, name, youtubeUrl)
-        if (isUpdated) {
-            res.sendStatus(204)
-            return
-        } else {
-            res.sendStatus(404)
-        }
-    })
+bloggersRouter.put('/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const {name, youtubeUrl} = req.body
+    const isUpdated = bloggersRepository.updateBlogger(id, name, youtubeUrl)
+    if (isUpdated) {
+        res.sendStatus(204)
+        return
+    } else {
+        res.sendStatus(404)
+    }
+})
 
-    bloggersRouter.delete('/:id', (req, res) => {
-        const id = Number(req.params.id)
-        const isDeleted = bloggersRepository.deleteBloggerById(id)
-        if (isDeleted) {
-            res.sendStatus(204)
-            return
-        } else {
-            res.sendStatus(404)
-        }
-    })
+bloggersRouter.delete('/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const isDeleted = bloggersRepository.deleteBloggerById(id)
+    if (isDeleted) {
+        res.sendStatus(204)
+        return
+    } else {
+        res.sendStatus(404)
+    }
+})
 
