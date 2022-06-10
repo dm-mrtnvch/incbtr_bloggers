@@ -39,7 +39,7 @@ bloggersRouter.post('', (req, res) => {
     }
 
     if (errors.errorsMessages.length > 0) {
-        res.status(400).json(errors)
+        res.status(400).send(errors)
         return
     }
 
