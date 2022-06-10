@@ -1,2 +1,3 @@
-export const error = {"errorsMessages": [{"message": "string", "field": "string"}]}
-const urlValidator = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/
+import {IError} from "./interfaces";
+
+export const error: IError | Object = {}

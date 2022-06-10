@@ -15,6 +15,12 @@ export interface IPost extends IUnique {
     bloggerName: string
 }
 
+export interface IError {
+    errorsMessages: [
+        message: string,
+        field: string
+    ]
+}
 
 /////////////////////////////////////
 export type Test = IBlogger | IPost

@@ -27,7 +27,6 @@ bloggersRouter.post('', (req, res) => {
     if (!name?.trim()) {
         errors.errorsMessages.push({message: 'incorrect field', field: "name"});
     }
-
     const isValidUrl = validURL(youtubeUrl)
     if (!isValidUrl) {
         console.log(isValidUrl)
