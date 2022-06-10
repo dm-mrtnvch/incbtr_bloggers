@@ -25,15 +25,15 @@ bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
     const errors: any = {errorsMessages: []}
 
+    const isValidName = validName(name)
+    if (!isValidName || !name?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "name"});
+    }
+
     const isValidUrl = validURL(youtubeUrl)
     if (!isValidUrl) {
         console.log(isValidUrl)
         errors.errorsMessages.push({message: 'incorrect field', field: "youtubeUrl"});
-    }
-    const isValidName = validName(name)
-    if (!isValidName || !name?.trim()) {
-        console.log(isValidName)
-        errors.errorsMessages.push({message: 'incorrect field', field: "name"});
     }
 
     if (errors.errorsMessages.length > 0) {

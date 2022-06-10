@@ -23,12 +23,9 @@ export function validURL(str: string) {
     return !!pattern.test(str);
 }
 export function validName(name: string){
-    let regName = /^[a-zA-Z]+ [a-zA-Z]+$/
-    if(!regName.test(name)){
-        return false
-    } else {
-        return true
-    }
+    let regName = /^[a-zA-Z]+[a-zA-Z]+$/
+    return regName.test(name)
+
 }
 
 function foo<T>(x: T): T {
