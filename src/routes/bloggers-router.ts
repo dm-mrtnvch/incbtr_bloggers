@@ -24,16 +24,14 @@ bloggersRouter.get('/:id', (req, res) => {
 bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
     const errors: any = {errorsMessages: []}
-    if (!name?.trim()) {
-        errors.errorsMessages.push({message: 'incorrect field', field: "name"});
-    }
+
     const isValidUrl = validURL(youtubeUrl)
     if (!isValidUrl) {
         console.log(isValidUrl)
         errors.errorsMessages.push({message: 'incorrect field', field: "youtubeUrl"});
     }
     const isValidName = validName(name)
-    if (!isValidName) {
+    if (!isValidName || !name?.trim()) {
         console.log(isValidName)
         errors.errorsMessages.push({message: 'incorrect field', field: "name"});
     }
@@ -48,7 +46,7 @@ bloggersRouter.post('', (req, res) => {
         res.status(201).json(newBlogger)
         return
     }
-    res.status(400).send(error)
+    res.status(400).send(errors)
 })
 
 bloggersRouter.put('/:id', (req, res) => {

@@ -1,3 +1,3 @@
 import {IError} from "./interfaces";
 
-export const error: IError | Object = {}
+export const error: IError = {errorsMessages: []}
