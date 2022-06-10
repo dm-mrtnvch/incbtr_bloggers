@@ -49,9 +49,8 @@ postsRouter.post('', (req: Request, res: Response) => {
     }
 
 
-    const bloggerName = blogger?.name
-    console.log(bloggerName)
-    // const bloggerName = typeof blogger !== "boolean" ? blogger.name : ''
+    // const bloggerName = blogger?.name
+    const bloggerName = typeof blogger !== "boolean" ? blogger.name : ''
     if(!bloggerName || bloggerName.trim().length < 1){
         errors.errorsMessages.push({message: 'incorrect field', field: "bloggerName"});
     }
