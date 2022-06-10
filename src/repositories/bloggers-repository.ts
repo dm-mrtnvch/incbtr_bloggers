@@ -6,7 +6,7 @@ export const bloggersRepository = {
     getAllBloggers(): IBlogger[] {
         return bloggers
     },
-    getBloggerById(id: number)/*: IBlogger | boolean*/ {
+    getBloggerById(id: number)/*:IBlogger | boolean*/ {
         const blogger = findObjectById(bloggers, id)
         if (blogger) {
             return blogger

@@ -1,9 +1,10 @@
 import {Request, Response, Router} from "express";
-import {IPost} from "../interfaces";
+import {IError, IPost} from "../interfaces";
 import {posts} from "../db/mock_data";
 import {postsRepository} from "../repositories/posts-repository";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {error} from "../config";
+import {validName} from "../helpers/utils";
 
 export const postsRouter = Router()
 
@@ -26,14 +27,44 @@ postsRouter.get('/:id', (req, res) => {
 postsRouter.post('', (req: Request, res: Response) => {
     const {title, shortDescription, content, bloggerId} = req.body
 
+    const errors: IError = {errorsMessages: []}
+    const isValidTitle = validName(title)
+    const isValidShortDescription =  validName(shortDescription)
+    const isValidSContent =  validName(content)
+    if (!isValidTitle || !title?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "title"});
+    }
+    if (!isValidShortDescription || !shortDescription?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "shortDescription"});
+    }
+    if (!isValidSContent || !content?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "content"});
+    }
+
+
+
     const blogger = bloggersRepository.getBloggerById(bloggerId)
     if(!blogger){
-        res.status(400).send(error)
+        errors.errorsMessages.push({message: 'incorrect field', field: "bloggerId"});
+    }
+
+
+    const bloggerName = blogger?.name
+    console.log(bloggerName)
+    // const bloggerName = typeof blogger !== "boolean" ? blogger.name : ''
+    if(!bloggerName || bloggerName.trim().length < 1){
+        errors.errorsMessages.push({message: 'incorrect field', field: "bloggerName"});
+    }
+    if (errors.errorsMessages.length > 0) {
+        res.status(400).send(errors)
         return
     }
-    const bloggerName = blogger?.name
 
-    if (title && shortDescription && content && bloggerId) {
+        if (title.trim().length > 0
+            && shortDescription.trim().length > 0
+            && content.trim().length > 0
+            && bloggerId) {
+
         const newPost: IPost = {
             id: Number(new Date()),
             title,
@@ -46,7 +77,7 @@ postsRouter.post('', (req: Request, res: Response) => {
         res.status(201).json(newPost)
         return
     }
-    res.status(400).send(error)
+    res.status(400).send(errors)
 })
 
 postsRouter.put('/:id', (req, res) => {

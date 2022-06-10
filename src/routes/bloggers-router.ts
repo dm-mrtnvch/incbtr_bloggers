@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {validName, validURL} from "../helpers/utils";
+import {bloggers} from "../db/mock_data";
 
 export const bloggersRouter = Router()
 
@@ -81,6 +82,11 @@ bloggersRouter.put('/:id', (req, res) => {
         }
     }
     res.sendStatus(404)
+})
+
+bloggersRouter.delete('', (req, res) => {
+    bloggers.slice(bloggers.length)
+    res.send(204)
 })
 
 bloggersRouter.delete('/:id', (req, res) => {
