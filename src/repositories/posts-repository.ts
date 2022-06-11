@@ -40,7 +40,11 @@ export const postsRepository = {
         if(post) {
             const postIndex = posts.findIndex(b => b.id === id)
             const filteredPosts = posts.splice(postIndex, 1)
-            return filteredPosts.length < posts.length
+            if(posts.length > 1){
+                return filteredPosts.length < posts.length
+            } else {
+                return true
+            }
         }
         return false
     }
