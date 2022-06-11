@@ -84,10 +84,10 @@ bloggersRouter.put('/:id', (req, res) => {
     res.sendStatus(404)
 })
 
-bloggersRouter.delete('', (req, res) => {
-    bloggers.slice(bloggers.length)
-    res.send(204)
-})
+// bloggersRouter.delete('', (req, res) => {
+//     bloggers.slice(bloggers.length)
+//     res.send(204)
+// })
 
 bloggersRouter.delete('/:id', (req, res) => {
     const id = Number(req.params.id)

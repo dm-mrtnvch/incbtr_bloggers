@@ -22,13 +22,4 @@ interface IErrorsMessages {
 
 export interface IError {
     errorsMessages: IErrorsMessages[]
-    // errorsMessages: [
-    //     {
-    //         message: string,
-    //         field: string
-    //     }
-    // ]
 }
-
-/////////////////////////////////////
-export type Test = IBlogger | IPost
