@@ -39,11 +39,11 @@ export const bloggersRepository = {
         if(blogger) {
             const bloggerIndex = bloggers.findIndex(b => b.id === id)
             const filteredBloggers = bloggers.splice(bloggerIndex, 1)
-            if(bloggers.length > 1){
+            // if(bloggers.length > 1){
                 return filteredBloggers.length < bloggers.length
-            } else {
-                return true
-            }
+            // } else {
+            //     return true
+            // }
         }
         return false
     }
