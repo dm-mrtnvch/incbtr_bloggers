@@ -82,6 +82,34 @@ postsRouter.post('', (req: Request, res: Response) => {
 postsRouter.put('/:id', (req, res) => {
     const id = Number(req.params.id)
     const {title, shortDescription, content, bloggerId} = req.body
+
+    const errors: IError = {errorsMessages: []}
+    const isValidTitle = validName(title)
+    const isValidShortDescription =  validName(shortDescription)
+    const isValidSContent =  validName(content)
+    if (!isValidTitle || !title?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "title"});
+    }
+    if (!isValidShortDescription || !shortDescription?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "shortDescription"});
+    }
+    if (!isValidSContent || !content?.trim()) {
+        errors.errorsMessages.push({message: 'incorrect field', field: "content"});
+    }
+
+    const blogger = bloggersRepository.getBloggerById(bloggerId)
+    if(!blogger){
+        errors.errorsMessages.push({message: 'incorrect field', field: "bloggerId"});
+        res.sendStatus(404).send(errors)
+        return;
+    }
+
+
+    if (errors.errorsMessages.length > 0) {
+        res.status(400).send(errors)
+        return
+    }
+
     const isUpdated = postsRepository.updatePost(id, title, shortDescription, content, bloggerId)
     if (isUpdated) {
         res.sendStatus(204)
