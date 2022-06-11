@@ -1,4 +1,4 @@
-import {IBlogger, IPost, Test} from "../interfaces";
+import {IBlogger, IPost} from "../interfaces";
 
 export const findBloggerById = (bloggers: IBlogger[], id: number) => {
     return bloggers.find(b => b.id === id)
@@ -26,8 +26,4 @@ export function validName(name: string){
     let regName = /^[\w'\-,.][^0-9_!¡?÷?¿\/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/
     return regName.test(name)
 
-}
-
-function foo<T>(x: T): T {
-    return x;
 }
