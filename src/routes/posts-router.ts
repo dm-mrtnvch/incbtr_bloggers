@@ -100,8 +100,8 @@ postsRouter.put('/:id', (req, res) => {
     const blogger = bloggersRepository.getBloggerById(bloggerId)
     if(!blogger){
         errors.errorsMessages.push({message: 'incorrect field', field: "bloggerId"});
-        res.sendStatus(404).send(errors)
-        return;
+        // res.sendStatus(404).send(errors)
+        // return;
     }
 
 
