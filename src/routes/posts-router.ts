@@ -3,8 +3,7 @@ import {IError, IPost} from "../interfaces";
 import {posts} from "../db/mock_data";
 import {postsRepository} from "../repositories/posts-repository";
 import {bloggersRepository} from "../repositories/bloggers-repository";
-import {error} from "../config";
-import {validName} from "../helpers/utils";
+import {stringValidation} from "../helpers/utils";
 
 export const postsRouter = Router()
 
@@ -28,9 +27,9 @@ postsRouter.post('', (req: Request, res: Response) => {
     const {title, shortDescription, content, bloggerId} = req.body
 
     const errors: IError = {errorsMessages: []}
-    const isValidTitle = validName(title)
-    const isValidShortDescription =  validName(shortDescription)
-    const isValidSContent =  validName(content)
+    const isValidTitle = stringValidation(title)
+    const isValidShortDescription =  stringValidation(shortDescription)
+    const isValidSContent =  stringValidation(content)
     if (!isValidTitle || !title?.trim()) {
         errors.errorsMessages.push({message: 'incorrect field', field: "title"});
     }
@@ -83,39 +82,18 @@ postsRouter.put('/:id', (req, res) => {
     const id = Number(req.params.id)
     const {title, shortDescription, content, bloggerId} = req.body
 
-    const errors: IError = {errorsMessages: []}
-    const isValidTitle = validName(title)
-    const isValidShortDescription =  validName(shortDescription)
-    const isValidSContent =  validName(content)
-    if (!isValidTitle || !title?.trim()) {
-        errors.errorsMessages.push({message: 'incorrect field', field: "title"});
-    }
-    if (!isValidShortDescription || !shortDescription?.trim()) {
-        errors.errorsMessages.push({message: 'incorrect field', field: "shortDescription"});
-    }
-    if (!isValidSContent || !content?.trim()) {
-        errors.errorsMessages.push({message: 'incorrect field', field: "content"});
-    }
-
-    const blogger = bloggersRepository.getBloggerById(bloggerId)
-    if(!blogger){
-        errors.errorsMessages.push({message: 'incorrect field', field: "bloggerId"});
-        // res.sendStatus(404).send(errors)
-        // return;
-    }
-
-
-    if (errors.errorsMessages.length > 0) {
-        res.status(400).send(errors)
-        return
-    }
-
     const isUpdated = postsRepository.updatePost(id, title, shortDescription, content, bloggerId)
     if (isUpdated) {
-        res.sendStatus(204)
-    } else {
-        res.sendStatus(404)
+        if(isUpdated.id){
+            res.sendStatus(204)
+            // return ???
+        }
+        if (isUpdated.errorsMessages) {
+            res.status(400).send(isUpdated)
+            return
+        }
     }
+    res.sendStatus(404)
 })
 
 postsRouter.delete('/:id', (req, res) => {

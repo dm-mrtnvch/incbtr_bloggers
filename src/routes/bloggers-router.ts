@@ -1,7 +1,5 @@
 import {Router} from "express";
 import {bloggersRepository} from "../repositories/bloggers-repository";
-import {validName, validURL} from "../helpers/utils";
-import {bloggers} from "../db/mock_data";
 
 export const bloggersRouter = Router()
 
@@ -23,78 +21,39 @@ bloggersRouter.get('/:id', (req, res) => {
 
 bloggersRouter.post('', (req, res) => {
     const {name, youtubeUrl} = req.body
-    const errors: any = {errorsMessages: []}
+    const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
 
-    const isValidName = validName(name)
-    if (!isValidName || !name?.trim()) {
-        errors.errorsMessages.push({message: 'incorrect field', field: "name"});
-    }
-
-    const isValidUrl = validURL(youtubeUrl)
-    if (!isValidUrl) {
-        console.log(isValidUrl)
-        errors.errorsMessages.push({message: 'incorrect field', field: "youtubeUrl"});
-    }
-
-    if (errors.errorsMessages.length > 0) {
-        res.status(400).send(errors)
-        return
-    }
-
-    if (name.trim().length > 0 && youtubeUrl.trim().length > 0) {
-        const newBlogger = bloggersRepository.createBlogger(name, youtubeUrl)
+    if ('id' in newBlogger) { // newBlogger.id?
         res.status(201).json(newBlogger)
-        return
+        return /*return ??? works fine without return*/
+    } else {
+        res.status(400).send(newBlogger)
     }
-    res.status(400).send(errors)
 })
 
 bloggersRouter.put('/:id', (req, res) => {
     const id = Number(req.params.id)
     const {name, youtubeUrl} = req.body
 
-    const errors: any = {errorsMessages: []}
-
-    const isValidName = validName(name)
-    if (!isValidName || !name?.trim()) {
-        errors.errorsMessages.push({message: 'incorrect field', field: "name"});
-    }
-
-    const isValidUrl = validURL(youtubeUrl)
-    if (!isValidUrl) {
-        console.log(isValidUrl)
-        errors.errorsMessages.push({message: 'incorrect field', field: "youtubeUrl"});
-    }
-
-    if (errors.errorsMessages.length > 0) {
-        res.status(400).send(errors)
-        return
-    }
-
-    if (name.trim().length > 0 && youtubeUrl.trim().length > 0 && id) {
-        const isUpdated = bloggersRepository.updateBlogger(id, name, youtubeUrl)
-        if (isUpdated) {
+    const isUpdated = bloggersRepository.updateBlogger(id, name, youtubeUrl)
+    if (isUpdated) {
+        if(isUpdated.id){
             res.sendStatus(204)
-            return
-        } else {
-            res.sendStatus(404)
+            // return ???
+        }
+        if (isUpdated.errorsMessages) {
+            res.status(400).send(isUpdated)
             return
         }
     }
     res.sendStatus(404)
 })
 
-// bloggersRouter.delete('', (req, res) => {
-//     bloggers.slice(bloggers.length)
-//     res.send(204)
-// })
-
 bloggersRouter.delete('/:id', (req, res) => {
     const id = Number(req.params.id)
     const isDeleted = bloggersRepository.deleteBloggerById(id)
     if (isDeleted) {
         res.sendStatus(204)
-        return
     } else {
         res.sendStatus(404)
     }

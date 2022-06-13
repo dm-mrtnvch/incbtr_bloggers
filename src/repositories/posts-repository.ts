@@ -1,6 +1,6 @@
 import {bloggers, posts} from "../db/mock_data";
 import {IPost} from "../interfaces";
-import {findBloggerById, findObjectById, findPostById} from "../helpers/utils";
+import {findObjectById, paramsValidation} from "../helpers/utils";
 
 
 export const postsRepository = {
@@ -23,9 +23,21 @@ export const postsRepository = {
 
         }
     },
-    updatePost(id: number, title: string, shortDescription: string, content: string, bloggerId: number) {
-        const post = findPostById(posts, id)
+    updatePost(id: number, title: string, shortDescription: string, content: string, bloggerId: number): any {
+        if (!id) { return false }
+
+        const post = findObjectById(posts, id)
         if (post) {
+            const errors = paramsValidation([
+                {title, field: 'title'},
+                {shortDescription, field: 'shortDescription'},
+                {content, field: 'content'},
+                {bloggerId, field: 'bloggerId'}
+            ])
+            if (errors.errorsMessages.length > 0) {
+                return errors
+            }
+
             post.title = title
             post.shortDescription = shortDescription
             post.content = content
