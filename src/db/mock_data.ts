@@ -1,4 +1,4 @@
-import {IBlogger, IPost} from "../interfaces";
+import {IBlogger, IPost} from "../interfaces/global_interfaces";
 
 export const bloggers: IBlogger[] = [
     {id: 1, name: 'razBlogger', youtubeUrl: 'https://www.youtube.com/raz'},

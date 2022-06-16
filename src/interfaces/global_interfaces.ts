@@ -15,11 +15,7 @@ export interface IPost extends IUnique {
     bloggerName: string
 }
 
-interface IErrorsMessages {
+export interface IError {
     message: string
     field: string
-}
-
-export interface IError {
-    errorsMessages: IErrorsMessages[]
 }
