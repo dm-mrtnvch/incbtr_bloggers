@@ -95,6 +95,7 @@ export const postsValidationMiddleware: Schema = {
         notEmpty: {
             errorMessage: 'bloggerId field can\'t be empty'
         },
+        toInt: true,
         custom: {
             options: (id) => bloggersRepository.getBloggerById(id),
             errorMessage: 'blogger doesn\'t exit'
