@@ -144,6 +144,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     const basicAuthorization = req.headers.authorization
     if (!basicAuthorization) {
         res.sendStatus(401)
+        return
     } else {
         const encoded = basicAuthorization?.split(' ')[1]
         const decoded = Buffer.from(encoded!, 'base64').toString();
@@ -151,7 +152,11 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         const login = loginAndPassword[0]
         const password = loginAndPassword[1]
         if (login === 'admin' && password === 'qwerty') {
-            next()
+            return next()
+
+        } else {
+            res.sendStatus(401)
+            return
         }
     }
 }
