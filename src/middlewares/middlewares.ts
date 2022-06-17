@@ -135,5 +135,5 @@ export const validation = (req: Request, res: Response, next: NextFunction) => {
     if (errors.isEmpty()) {
         next()
     }
-    res.status(404).json({errorsMessages: errorMessages})
+    res.status(400).json({errorsMessages: errorMessages})
 }
