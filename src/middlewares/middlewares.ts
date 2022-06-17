@@ -53,8 +53,8 @@ export const postsValidationMiddleware: Schema = {
             errorMessage: "title field can\'t be empty"
         },
         isLength: {
-            options: {max: 100},
-            errorMessage: "max length is 100 symbols"
+            options: {max: 30},
+            errorMessage: "max length is 30 symbols"
         }
     },
     shortDescription: {
