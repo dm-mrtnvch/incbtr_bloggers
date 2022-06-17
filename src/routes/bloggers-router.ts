@@ -5,7 +5,7 @@ import {
     idValidation,
     bloggersIdValidation,
     validation,
-    bloggersValidationMiddleware, oneOfIdValidation
+    bloggersValidationMiddleware, oneOfIdValidation, authMiddleware
 } from "../middlewares/middlewares";
 
 
@@ -27,6 +27,7 @@ bloggersRouter.get('/:id',
     })
 
 bloggersRouter.post('',
+    authMiddleware,
     checkSchema(bloggersValidationMiddleware),
     validation,
     (req: Request, res: Response) => {
@@ -36,6 +37,7 @@ bloggersRouter.post('',
     })
 
 bloggersRouter.put('/:id',
+    authMiddleware,
     bloggersIdValidation,
     idValidation,
     checkSchema(bloggersValidationMiddleware),
@@ -49,6 +51,7 @@ bloggersRouter.put('/:id',
 
 
 bloggersRouter.delete('/:id',
+    authMiddleware,
     bloggersIdValidation,
     idValidation,
     (req: Request, res: Response) => {
