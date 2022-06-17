@@ -1,7 +1,13 @@
 import {Request, Response, Router} from "express";
 import {IPost} from "../interfaces/global_interfaces";
 import {postsRepository} from "../repositories/posts-repository";
-import {idValidation, postsIdValidation, postsValidationMiddleware, validation} from "../middlewares/middlewares";
+import {
+    authMiddleware,
+    idValidation,
+    postsIdValidation,
+    postsValidationMiddleware,
+    validation
+} from "../middlewares/middlewares";
 import {checkSchema} from "express-validator";
 
 
@@ -22,6 +28,7 @@ postsRouter.get('/:id',
     })
 
 postsRouter.post('',
+    authMiddleware,
     checkSchema(postsValidationMiddleware),
     validation,
     (req: Request, res: Response) => {
@@ -31,6 +38,7 @@ postsRouter.post('',
     })
 
 postsRouter.put('/:id',
+    authMiddleware,
     postsIdValidation,
     idValidation,
     checkSchema(postsValidationMiddleware),
@@ -43,6 +51,7 @@ postsRouter.put('/:id',
     })
 
 postsRouter.delete('/:id',
+    authMiddleware,
     postsIdValidation,
     idValidation,
     (req: Request, res: Response) => {

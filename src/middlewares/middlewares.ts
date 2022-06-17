@@ -132,8 +132,21 @@ export const validation = (req: Request, res: Response, next: NextFunction) => {
             message: err.msg
         }))
 
-    if (errors.isEmpty()) {
+    if (errors.isEmpty()) { next() }
+    else { res.status(400).json({errorsMessages: errorMessages}) }
+
+}
+
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const basicAuthorization = req.headers.authorization
+    const encoded = basicAuthorization?.split(' ')[1]
+    const decoded = Buffer.from(encoded!,'base64').toString();
+    const loginAndPassword = decoded.split(':')
+    const login = loginAndPassword[0]
+    const password = loginAndPassword[1]
+    if (login === 'admin' && password === 'qwerty') {
         next()
+    } else {
+        res.sendStatus(401)
     }
-    res.status(400).json({errorsMessages: errorMessages})
 }
