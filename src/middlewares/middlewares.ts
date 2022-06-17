@@ -67,8 +67,8 @@ export const postsValidationMiddleware: Schema = {
             errorMessage: 'shortDescription field can\'t be empty'
         },
         isLength: {
-            options: {max: 300},
-            errorMessage: 'max length is 300 symbols'
+            options: {max: 100},
+            errorMessage: 'max length is 100 symbols'
         }
 
     },
