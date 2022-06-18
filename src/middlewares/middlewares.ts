@@ -4,6 +4,7 @@ import {Request, Response, NextFunction} from "express";
 import {postsRepository} from "../repositories/posts-repository";
 import {urlPattern} from "../helpers/utils";
 import {IError} from "../interfaces/global_interfaces";
+import {AUTHORISATION, CREDENTIALS} from "../config/constants";
 
 
 // ----- validation schemas -----
@@ -148,15 +149,15 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         return;
     }
 
-    const isBasic = authorization?.split(' ')[0]
-    if (isBasic === 'Basic') {
+    const isBasic = authorization?.split(' ')[0] === AUTHORISATION.BASIC
+    if (isBasic) {
         const encoded = authorization?.split(' ')[1]
-        const decoded = Buffer.from(encoded!, 'base64').toString();
+        const decoded = Buffer.from(encoded, 'base64').toString();
         const loginAndPassword = decoded.split(':')
         const login = loginAndPassword[0]
         const password = loginAndPassword[1]
 
-        if (login === 'admin' && password === 'qwerty') {
+        if (login === CREDENTIALS.ADMIN.LOGIN && password === CREDENTIALS.ADMIN.PASSWORD) {
             next()
             return
         }
