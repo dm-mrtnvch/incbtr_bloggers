@@ -141,22 +141,25 @@ export const validation = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const basicAuthorization = req.headers.authorization
-    if (!basicAuthorization) {
+    const {authorization} = req.headers
+
+    if (!authorization) {
         res.sendStatus(401)
-        return
-    } else {
-        const encoded = basicAuthorization?.split(' ')[1]
+        return;
+    }
+
+    const isBasic = authorization?.split(' ')[0]
+    if (isBasic === 'Basic') {
+        const encoded = authorization?.split(' ')[1]
         const decoded = Buffer.from(encoded!, 'base64').toString();
         const loginAndPassword = decoded.split(':')
         const login = loginAndPassword[0]
         const password = loginAndPassword[1]
-        if (login === 'admin' && password === 'qwerty') {
-            return next()
 
-        } else {
-            res.sendStatus(401)
+        if (login === 'admin' && password === 'qwerty') {
+            next()
             return
         }
     }
+    res.sendStatus(401)
 }
