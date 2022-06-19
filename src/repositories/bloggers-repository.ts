@@ -4,14 +4,14 @@ import {findObjectById} from "../helpers/utils";
 
 
 export const bloggersRepository = {
-    getAllBloggers(): IBlogger[] {
+    async getAllBloggers(): Promise<IBlogger[]> {
         return bloggers
     },
-    getBloggerById(id: number): IBlogger | null {
+    async getBloggerById(id: number): Promise<IBlogger | null> {
         const blogger = findObjectById(bloggers, id)
         return blogger
     },
-    createBlogger(name: string, youtubeUrl: string) {
+    async createBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger: IBlogger = {
             id: Number(new Date()),
             name,
@@ -19,9 +19,8 @@ export const bloggersRepository = {
         }
         bloggers.push(newBlogger)
         return newBlogger
-
     },
-    updateBlogger(id: number, name: string, youtubeUrl: string) {
+    async updateBlogger(id: number, name: string, youtubeUrl: string): Promise<IBlogger | undefined> {
         const blogger = findObjectById(bloggers, id)
         if (blogger) {
             blogger.name = name
@@ -29,7 +28,7 @@ export const bloggersRepository = {
             return blogger
         }
     },
-    deleteBloggerById(id: number) {
+   async deleteBloggerById(id: number): Promise<boolean | undefined> {
         const blogger = findObjectById(bloggers, id)
         if (blogger) {
             const bloggerIndex = bloggers.findIndex(b => b.id === id)

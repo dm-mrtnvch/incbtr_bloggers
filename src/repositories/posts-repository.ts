@@ -5,15 +5,15 @@ import {bloggersRepository} from "./bloggers-repository";
 
 
 export const postsRepository = {
-    getAllPosts() {
+   async getAllPosts(): Promise<IPost[]> {
         return posts
 
     },
-    getPostById(id: number): IPost | null {
+   async getPostById(id: number): Promise<IPost | null> {
         return findObjectById(posts, id)
     },
-    createPost(title: string, shortDescription: string, content: string, bloggerId: number) {
-        const blogger = bloggersRepository.getBloggerById(bloggerId)
+   async createPost(title: string, shortDescription: string, content: string, bloggerId: number): Promise<IPost | undefined> {
+        const blogger = await bloggersRepository.getBloggerById(bloggerId)
         // double check of blogger. first - middleware. second - in repository
         if (blogger) {
             const newPost: IPost = {
@@ -28,22 +28,24 @@ export const postsRepository = {
             return newPost
         }
     },
-    updatePost(id: number, title: string, shortDescription: string, content: string, bloggerId: number) {
-        const post = findObjectById(posts, id)
+    async updatePost(id: number, title: string, shortDescription: string, content: string, bloggerId: number): Promise<boolean> {
+        const post = await postsRepository.getPostById(id)
         if (post) {
             post.title = title
             post.shortDescription = shortDescription
             post.content = content
             post.bloggerId = bloggerId
+            return true
         }
-        // return ???
+        return false
     },
-    deletePostById(id: number) {
-        const post = findObjectById(posts, id)
+    async deletePostById(id: number): Promise<boolean> {
+        const post = await postsRepository.getPostById(id)
         if (post) {
             const postIndex = posts.findIndex(b => b.id === id)
             const filteredPosts = posts.splice(postIndex, 1)
             return !!filteredPosts.length
         }
+        return false
     }
 }
