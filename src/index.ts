@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import {runDb} from "./db/db";
 import {bloggersRouter} from "./routes/db-bloggers-router";
 import {postsRouter} from "./routes/db-posts-router";
+// import {config} from "dotenv";
+// config()
 
 const app = express()
 app.use(bodyParser())

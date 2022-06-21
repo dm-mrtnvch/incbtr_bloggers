@@ -27,6 +27,9 @@ export const bloggersService = {
     },
     async deleteBloggerById(id: number): Promise<boolean> {
         return bloggersRepository.deleteBloggerById(id)
+    },
+    async checkIfBloggerExist (id: number) {
+        return !!await bloggersRepository.getBloggerById(id)
     }
 }
 
