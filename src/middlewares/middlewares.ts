@@ -117,6 +117,7 @@ export const bloggersIdValidation = param('id', 'blogger doesn\'t exist')
 export const postsIdValidation = param('id', "post doesn't exist")
     .toInt()
     .custom(id => {
+        console.log(id)
         return postsRepository.getPostById(id)
     })
 
