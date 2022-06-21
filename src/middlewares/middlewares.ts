@@ -101,6 +101,7 @@ export const postsValidationMiddleware: Schema = {
         custom: {
             options: (id) => {
                 console.log(id)
+                console.log(id)
                 return bloggersService.checkIfBloggerExist(id)
             },
             errorMessage: 'blogger doesn\'t exit'
