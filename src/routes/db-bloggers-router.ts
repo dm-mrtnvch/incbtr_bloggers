@@ -13,6 +13,8 @@ export const bloggersRouter = Router()
 
 bloggersRouter.get('',
     async (req, res) => {
+    const {SearchNameTerm, PageNumber, PageSize} = req.query
+        console.log(SearchNameTerm, PageNumber, PageSize)
         const bloggers = await bloggersService.getAllBloggers()
         res.json(bloggers)
     })
