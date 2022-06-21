@@ -5,6 +5,7 @@ import {postsRepository} from "../repositories/posts-repository";
 import {urlPattern} from "../helpers/utils";
 import {IError} from "../interfaces/global_interfaces";
 import {AUTHORISATION, CREDENTIALS} from "../config/constants";
+import {bloggersService} from "../domain/bloggers-service";
 
 
 // ----- validation schemas -----
@@ -98,7 +99,7 @@ export const postsValidationMiddleware: Schema = {
         },
         toInt: true,
         custom: {
-            options: (id) => bloggersRepository.getBloggerById(id),
+            options: (id) => bloggersService.checkIfBloggerExist(id),
             errorMessage: 'blogger doesn\'t exit'
         }
     }
