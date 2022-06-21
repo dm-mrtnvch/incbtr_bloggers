@@ -99,7 +99,10 @@ export const postsValidationMiddleware: Schema = {
         },
         toInt: true,
         custom: {
-            options: (id) => bloggersService.checkIfBloggerExist(id),
+            options: (id) => {
+                console.log(id)
+                return bloggersService.checkIfBloggerExist(id)
+            },
             errorMessage: 'blogger doesn\'t exit'
         }
     }
