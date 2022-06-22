@@ -6,8 +6,23 @@ import e from "express";
 
 
 export const bloggersRepository = {
-    async getAllBloggers(): Promise<IBlogger[]> {
-        return await bloggersCollection.find({}).toArray()
+    async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
+        const filter = {name: {$regex: searchNameTerm ? searchNameTerm : ""}}
+
+        const bloggers = await bloggersCollection
+            .find({}, {projection: {_id: 0}})
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .toArray()
+        const totalCount = await bloggersCollection.countDocuments(filter)
+        const pagesCount = Math.ceil(totalCount / pageSize)
+        return {
+            pagesCount,
+            page,
+            pageSize,
+            totalCount,
+            items: bloggers
+        }
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {
         const blogger: IBlogger | null = await bloggersCollection.findOne({id})

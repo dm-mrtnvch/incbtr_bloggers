@@ -7,8 +7,8 @@ import {bloggersRepository} from "../repositories/db-bloggers-repository";
 
 
 export const bloggersService = {
-    async getAllBloggers(): Promise<IBlogger[]> {
-        return bloggersRepository.getAllBloggers()
+    async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<IBlogger[]> {
+        return bloggersRepository.getAllBloggers(page, pageSize, searchNameTerm)
         // return bloggers
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {

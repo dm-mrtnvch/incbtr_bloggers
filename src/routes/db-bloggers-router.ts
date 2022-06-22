@@ -4,18 +4,20 @@ import {
     idValidation,
     bloggersIdValidation,
     validation,
-    bloggersValidationMiddleware, oneOfIdValidation, authMiddleware
+    bloggersValidationMiddleware, oneOfIdValidation, authMiddleware, paginationRules
 } from "../middlewares/middlewares";
 import {bloggersService} from "../domain/bloggers-service";
+import {getPaginationData} from "../helpers/utils";
 
 
 export const bloggersRouter = Router()
 
 bloggersRouter.get('',
-    async (req, res) => {
-    const {SearchNameTerm, PageNumber, PageSize} = req.query
-        console.log(SearchNameTerm, PageNumber, PageSize)
-        const bloggers = await bloggersService.getAllBloggers()
+    paginationRules,
+    validation,
+    async (req: Request, res: Response) => {
+        const {page, pageSize, searchNameTerm} = getPaginationData(req.query)
+        const bloggers = await bloggersService.getAllBloggers(page, pageSize, searchNameTerm)
         res.json(bloggers)
     })
 
@@ -28,7 +30,7 @@ bloggersRouter.get('/:id',
         res.json(blogger)
     })
 
-bloggersRouter.post( '',
+bloggersRouter.post('',
     authMiddleware,
     checkSchema(bloggersValidationMiddleware),
     validation,

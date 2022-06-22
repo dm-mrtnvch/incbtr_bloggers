@@ -1,4 +1,4 @@
-import {oneOf, param, Schema, validationResult} from "express-validator";
+import {check, oneOf, param, Schema, validationResult} from "express-validator";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {Request, Response, NextFunction} from "express";
 import {postsRepository} from "../repositories/posts-repository";
@@ -107,6 +107,15 @@ export const postsValidationMiddleware: Schema = {
     }
 }
 
+export const paginationRules = [
+    check('page').optional({checkFalsy: true,},)
+        .isInt({min: 1}).withMessage('page should be numeric value'),
+    check('pageSize').optional({checkFalsy: true})
+        .isInt({min: 1}).withMessage('pageSize should be numeric value'),
+    check('searchNameTerm').optional({checkFalsy: true})
+        .isString().withMessage('searchNameTerm should be string'),
+]
+
 // ----- validations -----
 export const bloggersIdValidation = param('id', 'blogger doesn\'t exist')
     .toInt()
@@ -142,7 +151,6 @@ export const validation = (req: Request, res: Response, next: NextFunction) => {
     } else {
         res.status(400).json({errorsMessages: errorMessages})
     }
-
 }
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
