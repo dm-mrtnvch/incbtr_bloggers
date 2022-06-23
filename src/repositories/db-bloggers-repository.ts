@@ -30,7 +30,11 @@ export const bloggersRepository = {
     },
     async createBlogger(newBlogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(newBlogger)
-        return newBlogger
+        return {
+            name: newBlogger.name,
+            youtubeUrl: newBlogger.youtubeUrl,
+            id: newBlogger.id
+        }
     },
     async updateBlogger(id: number, name: string, youtubeUrl: string): Promise<boolean> {
         const result = await bloggersCollection.updateOne({id}, {$set: {name, youtubeUrl}})
