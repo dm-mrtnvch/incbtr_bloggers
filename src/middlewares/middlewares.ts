@@ -127,6 +127,7 @@ export const bloggersIdValidation = param('bloggerId', 'blogger doesn\'t exist')
     .toInt()
     .custom(async id => await bloggersRepository.getBloggerById(id))
 
+
 export const postsIdValidation = param('postId', "post doesn't exist")
     .toInt()
     .custom(async id => await postsRepository.getPostById(id))

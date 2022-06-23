@@ -14,7 +14,14 @@ export const postsRepository = {
     },
     async createPost(newPost: IPost, bloggerId: number): Promise<IPost> {
         await postsCollection.insertOne(newPost)
-        return newPost
+        return {
+            id: newPost.id,
+            title: newPost.title,
+            shortDescription: newPost.shortDescription,
+            content: newPost.content,
+            bloggerId: newPost.bloggerId,
+            bloggerName: newPost.bloggerName
+        }
 
     },
     async updatePost(id: number, title: string, shortDescription: string, content: string, bloggerId: number): Promise<boolean> {
