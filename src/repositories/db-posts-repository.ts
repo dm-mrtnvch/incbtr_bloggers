@@ -7,10 +7,10 @@ import {bloggersCollection, postsCollection} from "../db/db";
 
 export const postsRepository = {
     async getAllPosts(): Promise<IPost[]> {
-        return await postsCollection.find({}).toArray()
+        return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
     },
     async getPostById(id: number): Promise<IPost | null> {
-        return await postsCollection.findOne({id})
+        return await postsCollection.findOne({id}, {projection: {_id: 0}})
     },
     async createPost(newPost: IPost, bloggerId: number): Promise<IPost> {
         await postsCollection.insertOne(newPost)
