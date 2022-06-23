@@ -4,10 +4,11 @@ import {
     idValidation,
     bloggersIdValidation,
     validation,
-    bloggersValidationMiddleware, oneOfIdValidation, authMiddleware, paginationRules
+    bloggersValidationMiddleware, oneOfIdValidation, authMiddleware, paginationRules, postsValidationMiddleware
 } from "../middlewares/middlewares";
 import {bloggersService} from "../domain/bloggers-service";
 import {getPaginationData} from "../helpers/utils";
+import {postsService} from "../domain/posts-service";
 
 
 export const bloggersRouter = Router()
@@ -38,6 +39,25 @@ bloggersRouter.post('',
         const {name, youtubeUrl} = req.body
         const newBlogger = await bloggersService.createBlogger(name, youtubeUrl)
         res.status(201).json(newBlogger)
+    })
+
+bloggersRouter.post('/:id/posts',
+    authMiddleware,
+    oneOfIdValidation,
+    idValidation,
+    checkSchema(postsValidationMiddleware),
+    validation,
+    async (req: Request, res: Response) => {
+    const bloggerId = Number(req.params.id)
+        const {title, shortDescription, content} = req.body
+        const newPost = await postsService.createPost(title, shortDescription, content, bloggerId)
+        if(newPost){
+            res.status(201).json(newPost)
+        } else {
+            res.sendStatus(404)
+        }
+
+
     })
 
 bloggersRouter.put('/:id',
