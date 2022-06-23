@@ -3,9 +3,9 @@ import {IPost} from "../interfaces/global_interfaces";
 import {postsRepository} from "../repositories/posts-repository";
 import {
     authMiddleware,
-    idValidation,
+    idValidation, oneOfIdValidation,
     postsIdValidation,
-    postsValidationMiddleware,
+    postsValidationSchema,
     validation
 } from "../middlewares/middlewares";
 import {checkSchema} from "express-validator";
@@ -20,18 +20,18 @@ postsRouter.get('',
         res.json(posts)
     })
 
-postsRouter.get('/:id',
-    postsIdValidation,
+postsRouter.get('/:postId',
+    oneOfIdValidation,
     idValidation,
     async (req, res) => {
-        const id = Number(req.params.id)
+        const id = Number(req.params.postId)
         const post = await postsService.getPostById(id)
         res.json(post)
     })
 
 postsRouter.post('',
     authMiddleware,
-    checkSchema(postsValidationMiddleware),
+    checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const {title, shortDescription, content, bloggerId} = req.body
@@ -43,14 +43,14 @@ postsRouter.post('',
         }
     })
 
-postsRouter.put('/:id',
+postsRouter.put('/:postId',
     authMiddleware,
-    postsIdValidation,
+    oneOfIdValidation,
     idValidation,
-    checkSchema(postsValidationMiddleware),
+    checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const id = Number(req.params.postId)
         const {title, shortDescription, content, bloggerId} = req.body
         const isUpdated = await postsService.updatePost(id, title, shortDescription, content, bloggerId)
         if (isUpdated) {
@@ -60,12 +60,12 @@ postsRouter.put('/:id',
         }
     })
 
-postsRouter.delete('/:id',
+postsRouter.delete('/:postId',
     authMiddleware,
-    postsIdValidation,
+    oneOfIdValidation,
     idValidation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const id = Number(req.params.postId)
         await postsService.deletePostById(id)
         res.sendStatus(204)
     })

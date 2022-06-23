@@ -4,7 +4,7 @@ import {
     idValidation,
     bloggersIdValidation,
     validation,
-    bloggersValidationMiddleware, oneOfIdValidation, authMiddleware, paginationRules, postsValidationMiddleware
+    bloggersValidationSchema, oneOfIdValidation, authMiddleware, paginationValidation, postsValidationSchema
 } from "../middlewares/middlewares";
 import {bloggersService} from "../domain/bloggers-service";
 import {getPaginationData} from "../helpers/utils";
@@ -14,7 +14,7 @@ import {postsService} from "../domain/posts-service";
 export const bloggersRouter = Router()
 
 bloggersRouter.get('',
-    paginationRules,
+    paginationValidation,
     validation,
     async (req: Request, res: Response) => {
         const {page, pageSize, searchNameTerm} = getPaginationData(req.query)
@@ -22,18 +22,18 @@ bloggersRouter.get('',
         res.json(bloggers)
     })
 
-bloggersRouter.get('/:id',
+bloggersRouter.get('/:bloggerId',
     oneOfIdValidation,
     idValidation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
-        const blogger = await bloggersService.getBloggerById(id)
+        const bloggerId = Number(req.params.bloggerId)
+        const blogger = await bloggersService.getBloggerById(bloggerId)
         res.json(blogger)
     })
 
 bloggersRouter.post('',
     authMiddleware,
-    checkSchema(bloggersValidationMiddleware),
+    checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const {name, youtubeUrl} = req.body
@@ -41,33 +41,32 @@ bloggersRouter.post('',
         res.status(201).json(newBlogger)
     })
 
-bloggersRouter.post('/:id/posts',
+bloggersRouter.post('/:bloggerId/posts',
     authMiddleware,
     oneOfIdValidation,
     idValidation,
-    checkSchema(postsValidationMiddleware),
+    checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-    const bloggerId = Number(req.params.id)
+    const bloggerId = Number(req.params.bloggerId)
         const {title, shortDescription, content} = req.body
         const newPost = await postsService.createPost(title, shortDescription, content, bloggerId)
+        console.log(newPost)
         if(newPost){
             res.status(201).json(newPost)
         } else {
             res.sendStatus(404)
         }
-
-
     })
 
-bloggersRouter.put('/:id',
+bloggersRouter.put('/:bloggerId',
     authMiddleware,
-    bloggersIdValidation,
+    oneOfIdValidation,
     idValidation,
-    checkSchema(bloggersValidationMiddleware),
+    checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const id = Number(req.params.bloggerId)
         const {name, youtubeUrl} = req.body
         const isUpdated = await bloggersService.updateBlogger(id, name, youtubeUrl)
         if (isUpdated) {
@@ -78,12 +77,12 @@ bloggersRouter.put('/:id',
     })
 
 
-bloggersRouter.delete('/:id',
+bloggersRouter.delete('/:bloggerId',
     authMiddleware,
-    bloggersIdValidation,
+    oneOfIdValidation,
     idValidation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const id = Number(req.params.bloggerId)
         const isDeleted = await bloggersService.deleteBloggerById(id)
         if (isDeleted) {
             res.sendStatus(204)

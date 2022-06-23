@@ -4,7 +4,7 @@
 //     idValidation,
 //     bloggersIdValidation,
 //     validation,
-//     bloggersValidationMiddleware, oneOfIdValidation, authMiddleware
+//     bloggersValidationSchema, oneOfIdValidation, authMiddleware
 // } from "../middlewares/middlewares";
 // import {bloggersRepository} from "../repositories/db-bloggers-repository";
 //
@@ -28,7 +28,7 @@
 //
 // bloggersRouter.post('',
 //     authMiddleware,
-//     checkSchema(bloggersValidationMiddleware),
+//     checkSchema(bloggersValidationSchema),
 //     validation,
 //     async (req: Request, res: Response) => {
 //         const {name, youtubeUrl} = req.body
@@ -40,7 +40,7 @@
 //     authMiddleware,
 //     bloggersIdValidation,
 //     idValidation,
-//     checkSchema(bloggersValidationMiddleware),
+//     checkSchema(bloggersValidationSchema),
 //     validation,
 //     async (req: Request, res: Response) => {
 //         const id = Number(req.params.id)

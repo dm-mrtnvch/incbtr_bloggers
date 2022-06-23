@@ -5,7 +5,7 @@ import {
     authMiddleware,
     idValidation,
     postsIdValidation,
-    postsValidationMiddleware,
+    postsValidationSchema,
     validation
 } from "../middlewares/middlewares";
 import {checkSchema} from "express-validator";
@@ -30,7 +30,7 @@ postsRouter.get('/:id',
 
 postsRouter.post('',
     authMiddleware,
-    checkSchema(postsValidationMiddleware),
+    checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const {title, shortDescription, content, bloggerId} = req.body
@@ -42,7 +42,7 @@ postsRouter.put('/:id',
     authMiddleware,
     postsIdValidation,
     idValidation,
-    checkSchema(postsValidationMiddleware),
+    checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const id = Number(req.params.id)

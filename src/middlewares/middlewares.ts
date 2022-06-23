@@ -9,7 +9,7 @@ import {bloggersService} from "../domain/bloggers-service";
 
 
 // ----- validation schemas -----
-export const bloggersValidationMiddleware: Schema = {
+export const bloggersValidationSchema: Schema = {
     name: {
         in: ['body'],
         exists: {
@@ -44,7 +44,7 @@ export const bloggersValidationMiddleware: Schema = {
     }
 }
 
-export const postsValidationMiddleware: Schema = {
+export const postsValidationSchema: Schema = {
     title: {
         in: ['body'],
         exists: {
@@ -89,7 +89,7 @@ export const postsValidationMiddleware: Schema = {
         }
     },
     bloggerId: {
-        in: ['body'],
+        in: ['body', 'params'],
         exists: {
             errorMessage: 'bloggerId is required'
         },
@@ -107,26 +107,29 @@ export const postsValidationMiddleware: Schema = {
     }
 }
 
-export const paginationRules = [
-    check('page').optional({checkFalsy: true,},)
-        .isInt({min: 1}).withMessage('page should be numeric value'),
-    check('pageSize').optional({checkFalsy: true})
-        .isInt({min: 1}).withMessage('pageSize should be numeric value'),
-    check('searchNameTerm').optional({checkFalsy: true})
-        .isString().withMessage('searchNameTerm should be string'),
+export const paginationValidation = [
+    check('page')
+        .optional({checkFalsy: true})
+        .isInt({min: 1})
+        .withMessage('page error'),
+    check('pageSize')
+        .optional({checkFalsy: true})
+        .isInt({min: 1})
+        .withMessage('pageSize error'),
+    check('searchNameTerm')
+        .optional({checkFalsy: true})
+        .isString()
+        .withMessage('searchNameTerm error'),
 ]
 
 // ----- validations -----
-export const bloggersIdValidation = param('id', 'blogger doesn\'t exist')
+export const bloggersIdValidation = param('bloggerId', 'blogger doesn\'t exist')
     .toInt()
-    .custom(id => bloggersRepository.getBloggerById(id))
+    .custom(async id => await bloggersRepository.getBloggerById(id))
 
-export const postsIdValidation = param('id', "post doesn't exist")
+export const postsIdValidation = param('postId', "post doesn't exist")
     .toInt()
-    .custom(id => {
-        console.log(id)
-        return postsRepository.getPostById(id)
-    })
+    .custom(async id => await postsRepository.getPostById(id))
 
 export const oneOfIdValidation = oneOf([bloggersIdValidation, postsIdValidation])
 

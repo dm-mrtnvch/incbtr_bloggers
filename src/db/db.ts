@@ -5,7 +5,6 @@ config()
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
 const client = new MongoClient(mongoUri);
-console.log('6', process.env.mongoURI)
 
 const db = client.db("bloggers")
 
@@ -13,7 +12,6 @@ export const bloggersCollection = db.collection<IBlogger>('bloggers')
 export const postsCollection = db.collection<IPost>('posts')
 
 export async function runDb() {
-    console.log('14', process.env.mongoURI)
     try {
         // Connect the client to the server
         await client.connect();
