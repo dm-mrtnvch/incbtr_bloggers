@@ -123,10 +123,22 @@ export const paginationValidation = [
 ]
 
 // ----- validations -----
-export const bloggersIdValidation = param('bloggerId', 'blogger doesn\'t exist')
-    .toInt()
-    .custom(async id => await bloggersRepository.getBloggerById(id))
+export const bloggersIdValidation = async (req: Request, res: Response, next: NextFunction) => {
+    await param('id', 'blogger doesn\'t exist')
+        .toInt()
+        .custom(async bloggerId => {
+            const blogger = await bloggersService.getBloggerById(bloggerId) // what solution is correct
+            // const blogger = await  bloggersService.checkIfBloggerExist(bloggerId) // this one or previous?
+            return (!!blogger) ? Promise.resolve() : Promise.reject()
+        }).run(req)
 
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.sendStatus(404)
+    } else {
+        next()
+    }
+}
 
 export const postsIdValidation = param('postId', "post doesn't exist")
     .toInt()
@@ -138,8 +150,9 @@ export const idValidation = (req: Request, res: Response, next: NextFunction) =>
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         res.sendStatus(404)
+    } else {
+        next()
     }
-    next()
 }
 
 export const validation = (req: Request, res: Response, next: NextFunction) => {

@@ -5,6 +5,7 @@ import {bloggersCollection} from "../db/db";
 import e from "express";
 
 
+
 export const bloggersRepository = {
     async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
         const filter = {name: {$regex: searchNameTerm ? searchNameTerm : ""}}
@@ -25,7 +26,7 @@ export const bloggersRepository = {
         }
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {
-        const blogger: IBlogger | null = await bloggersCollection.findOne({id}, {projection: {_id: 0}})
+        const blogger: IBlogger | null =  await bloggersCollection.findOne({id}, {projection: {_id: 0}})
         return blogger
     },
     async createBlogger(newBlogger: IBlogger): Promise<IBlogger> {

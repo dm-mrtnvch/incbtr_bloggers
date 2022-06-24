@@ -22,13 +22,15 @@ bloggersRouter.get('',
         res.json(bloggers)
     })
 
-bloggersRouter.get('/:bloggerId',
-    oneOfIdValidation,
-    idValidation,
+bloggersRouter.get('/:id',
     async (req: Request, res: Response) => {
-        const bloggerId = Number(req.params.bloggerId)
+        const bloggerId = Number(req.params.id)
         const blogger = await bloggersService.getBloggerById(bloggerId)
-        res.json(blogger)
+        if(blogger){
+            res.json(blogger)
+        } else {
+            res.sendStatus(404)
+        }
     })
 
 bloggersRouter.post('',
@@ -41,27 +43,26 @@ bloggersRouter.post('',
         res.status(201).json(newBlogger)
     })
 
-bloggersRouter.post('/:bloggerId/posts',
+bloggersRouter.post('/:id/posts',
     authMiddleware,
-    oneOfIdValidation,
-    idValidation,
+    bloggersIdValidation,
     checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-    const bloggerId = Number(req.params.bloggerId)
+        const bloggerId = Number(req.params.id)
         const {title, shortDescription, content} = req.body
         const newPost = await postsService.createPost(title, shortDescription, content, bloggerId)
         console.log(newPost)
-        if(newPost){
+        if (newPost) {
             res.status(201).json(newPost)
         } else {
             res.sendStatus(404)
         }
     })
 
-bloggersRouter.put('/:bloggerId',
+bloggersRouter.put('/:id',
     authMiddleware,
-    oneOfIdValidation,
+    bloggersIdValidation,
     idValidation,
     checkSchema(bloggersValidationSchema),
     validation,
@@ -77,9 +78,9 @@ bloggersRouter.put('/:bloggerId',
     })
 
 
-bloggersRouter.delete('/:bloggerId',
+bloggersRouter.delete('/:id',
     authMiddleware,
-    oneOfIdValidation,
+    bloggersIdValidation, // check blogger here or send 404 in controller?
     idValidation,
     async (req: Request, res: Response) => {
         const id = Number(req.params.bloggerId)
