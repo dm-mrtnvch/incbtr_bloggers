@@ -144,7 +144,7 @@ export const postsIdValidation = param('postId', "post doesn't exist")
     .toInt()
     .custom(async id => await postsRepository.getPostById(id))
 
-export const oneOfIdValidation = oneOf([bloggersIdValidation, postsIdValidation])
+export const oneOfIdValidation = oneOf([postsIdValidation])
 
 export const idValidation = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
