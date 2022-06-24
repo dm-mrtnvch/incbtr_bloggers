@@ -88,7 +88,7 @@ bloggersRouter.delete('/:id',
     bloggersIdValidation, // check blogger here or send 404 in controller?
     idValidation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.bloggerId)
+        const id = Number(req.params.id)
         const isDeleted = await bloggersService.deleteBloggerById(id)
         if (isDeleted) {
             res.sendStatus(204)
