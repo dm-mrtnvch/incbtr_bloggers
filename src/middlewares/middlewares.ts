@@ -1,4 +1,4 @@
-import {check, oneOf, param, Schema, validationResult} from "express-validator";
+import {check, checkSchema, oneOf, param, Schema, ValidationChain, validationResult} from "express-validator";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {Request, Response, NextFunction} from "express";
 import {postsRepository} from "../repositories/posts-repository";
@@ -155,20 +155,26 @@ export const idValidation = (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
-export const validation = (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req)
-    const errorMessages: IError[] = errors.array({onlyFirstError: true})
-        .map(err => ({
-            field: err.param,
-            message: err.msg
-        }))
+export const validation = (validations: ValidationChain[]) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const errors = validationResult(req)
+        const errorMessages: IError[] = errors.array({onlyFirstError: true})
+            .map(err => ({
+                field: err.param,
+                message: err.msg
+            }))
 
-    if (errors.isEmpty()) {
-        next()
-    } else {
-        res.status(400).json({errorsMessages: errorMessages})
+        if (errors.isEmpty()) {
+            next()
+        } else {
+            res.status(400).json({errorsMessages: errorMessages})
+        }
     }
 }
+
+export const inputBloggersValidation = validation(checkSchema(bloggersValidationSchema))
+export const inputPostsValidation = validation(checkSchema(postsValidationSchema))
+
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const {authorization} = req.headers
