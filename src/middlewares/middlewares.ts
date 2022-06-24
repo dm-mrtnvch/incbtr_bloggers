@@ -107,6 +107,53 @@ export const postsValidationSchema: Schema = {
     }
 }
 
+export const postsValidationSchemaWithoutBloggerId: Schema = {
+    title: {
+        in: ['body'],
+        exists: {
+            errorMessage: "title field is required"
+        },
+        trim: true,
+        notEmpty: {
+            errorMessage: "title field can\'t be empty"
+        },
+        isLength: {
+            options: {max: 30},
+            errorMessage: "max length is 30 symbols"
+        }
+    },
+    shortDescription: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'shortDescription is required'
+        },
+        trim: true,
+        notEmpty: {
+            errorMessage: 'shortDescription field can\'t be empty'
+        },
+        isLength: {
+            options: {max: 100},
+            errorMessage: 'max length is 100 symbols'
+        }
+
+    },
+    content: {
+        in: ['body'],
+        exists: {
+            errorMessage: 'content is required'
+        },
+        trim: true,
+        notEmpty: {
+            errorMessage: 'content field can\'t be empty'
+        },
+        isLength: {
+            options: {max: 1000},
+            errorMessage: 'max length is 1000 symbols'
+        }
+    }
+}
+
+
 export const paginationValidation = [
     check('page')
         .optional({checkFalsy: true})

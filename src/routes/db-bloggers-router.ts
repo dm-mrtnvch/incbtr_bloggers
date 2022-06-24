@@ -4,7 +4,12 @@ import {
     idValidation,
     bloggersIdValidation,
     validation,
-    bloggersValidationSchema, oneOfIdValidation, authMiddleware, paginationValidation, postsValidationSchema
+    bloggersValidationSchema,
+    oneOfIdValidation,
+    authMiddleware,
+    paginationValidation,
+    postsValidationSchema,
+    postsValidationSchemaWithoutBloggerId
 } from "../middlewares/middlewares";
 import {bloggersService} from "../domain/bloggers-service";
 import {getPaginationData} from "../helpers/utils";
@@ -46,7 +51,7 @@ bloggersRouter.post('',
 bloggersRouter.post('/:id/posts',
     authMiddleware,
     bloggersIdValidation,
-    checkSchema(postsValidationSchema),
+    checkSchema(postsValidationSchemaWithoutBloggerId),
     validation,
     async (req: Request, res: Response) => {
         const bloggerId = Number(req.params.id)

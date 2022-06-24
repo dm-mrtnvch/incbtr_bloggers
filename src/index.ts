@@ -15,6 +15,7 @@ app.get('', (req, res) => {
 })
 app.use('/posts', postsRouter)
 app.use('/bloggers', bloggersRouter)
+app
 
 
 
