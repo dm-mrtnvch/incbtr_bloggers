@@ -4,12 +4,7 @@ import {
     idValidation,
     bloggersIdValidation,
     validation,
-    bloggersValidationSchema,
-    oneOfIdValidation,
-    authMiddleware,
-    paginationValidation,
-    postsValidationSchema,
-    inputBloggersValidation, inputPostsValidation
+    bloggersValidationSchema, oneOfIdValidation, authMiddleware, paginationValidation, postsValidationSchema
 } from "../middlewares/middlewares";
 import {bloggersService} from "../domain/bloggers-service";
 import {getPaginationData} from "../helpers/utils";
@@ -40,7 +35,7 @@ bloggersRouter.get('/:id',
 
 bloggersRouter.post('',
     authMiddleware,
-    inputBloggersValidation,
+    checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const {name, youtubeUrl} = req.body
@@ -51,7 +46,7 @@ bloggersRouter.post('',
 bloggersRouter.post('/:id/posts',
     authMiddleware,
     bloggersIdValidation,
-    inputPostsValidation,
+    checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const bloggerId = Number(req.params.id)
@@ -69,7 +64,7 @@ bloggersRouter.put('/:id',
     authMiddleware,
     bloggersIdValidation,
     idValidation,
-    inputBloggersValidation,
+    checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
         const id = Number(req.params.bloggerId)
