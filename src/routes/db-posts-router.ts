@@ -4,7 +4,7 @@ import {postsRepository} from "../repositories/posts-repository";
 import {
     authMiddleware,
     idValidation, oneOfIdValidation,
-    postsIdValidation,
+    postsIdValidation, postsIdValidationAsync,
     postsValidationSchema,
     validation
 } from "../middlewares/middlewares";
@@ -64,7 +64,7 @@ postsRouter.put('/:postId',
 
 postsRouter.delete('/:postId',
     authMiddleware,
-    oneOfIdValidation,
+    postsIdValidationAsync,
     idValidation,
     async (req: Request, res: Response) => {
         const id = Number(req.params.postId)

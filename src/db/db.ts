@@ -17,9 +17,6 @@ export async function runDb() {
         await client.connect();
         await client.db('bloggers').command({ping: 1})
         console.log("Connected successfully to mongo server", mongoUri);
-        // await bloggersCollection.deleteMany({})
-        // await postsCollection.deleteMany({})
-
     } catch {
         console.log("Can't connect to db");
         // Ensures that the client will close when you finish/error

@@ -6,6 +6,7 @@ import {urlPattern} from "../helpers/utils";
 import {IError} from "../interfaces/global_interfaces";
 import {AUTHORISATION, CREDENTIALS} from "../config/constants";
 import {bloggersService} from "../domain/bloggers-service";
+import {postsService} from "../domain/posts-service";
 
 
 // ----- validation schemas -----
@@ -190,6 +191,24 @@ export const bloggersIdValidation = async (req: Request, res: Response, next: Ne
 export const postsIdValidation = param('postId', "post doesn't exist")
     .toInt()
     .custom(async id => await postsRepository.getPostById(id))
+
+export const postsIdValidationAsync = async (req: Request, res: Response, next: NextFunction) => {
+    await param('id', 'post doesn\'t exist')
+        .toInt()
+        .custom(async id => {
+            const post = await postsService.getPostById(id)
+            return (!!post) ? Promise.resolve() : Promise.reject()
+        }).run(req)
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.sendStatus(404)
+    } else {
+        next()
+    }
+}
+
+
 
 export const oneOfIdValidation = oneOf([postsIdValidation])
 
