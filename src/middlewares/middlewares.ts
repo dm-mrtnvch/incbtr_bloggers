@@ -20,7 +20,7 @@ export const bloggersValidationSchema: Schema = {
             errorMessage: "name field can\'t be empty"
         },
         isLength: {
-            options: {min: 5, max: 15},
+            options: {max: 15},
             errorMessage: "min length is 5 / max length is 15 symbols"
         }
     },
