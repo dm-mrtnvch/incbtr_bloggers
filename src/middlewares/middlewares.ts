@@ -100,13 +100,15 @@ export const postsValidationSchema: Schema = {
         },
         toInt: true,
         custom: {
-            options: (id) => {
-                return bloggersService.checkIfBloggerExist(id)
+            options: async (id) => {
+                const blogger = await bloggersService.getBloggerById(id)
+                return !!blogger ? Promise.resolve() : Promise.reject()
             },
             errorMessage: 'blogger doesn\'t exit'
         }
     }
 }
+
 
 export const postsValidationSchemaWithoutBloggerId: Schema = {
     title: {
