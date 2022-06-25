@@ -17,7 +17,7 @@ export const postsRouter = Router()
 
 postsRouter.get('',
     async (req, res) => {
-        const {page, pageSize, searchNameTerm} =  getPaginationData(req.query)
+        const {page, pageSize, searchNameTerm} = getPaginationData(req.query)
         const posts: IPost[] = await postsService.getAllPosts(page, pageSize, searchNameTerm)
         res.json(posts)
     })
@@ -38,7 +38,7 @@ postsRouter.post('',
     async (req: Request, res: Response) => {
         const {title, shortDescription, content, bloggerId} = req.body
         const newPost = await postsService.createPost(title, shortDescription, content, bloggerId)
-        if(newPost) {
+        if (newPost) {
             res.status(201).json(newPost)
         } else {
             res.sendStatus(404)
@@ -62,15 +62,18 @@ postsRouter.put('/:postId',
         }
     })
 
-postsRouter.delete('/:postId',
+postsRouter.delete('/:id',
     authMiddleware,
     postsIdValidationAsync,
+    idValidation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.postId)
-        const isDeleted = await postsService.deletePostById(id)
-        if(isDeleted){
-            res.sendStatus(204)
-        } else {
-            res.status(404).json({error: 'error from posts controller'})
-        }
+        const id = Number(req.params.id)
+        await postsService.deletePostById(id)
+        res.sendStatus(204)
+        // const isDeleted = await postsService.deletePostById(id)
+        // if(isDeleted){
+        //     res.sendStatus(204)
+        // } else {
+        //     res.status(404).json({error: 'error from posts controller'})
+        // }
     })

@@ -10,7 +10,7 @@ export const postsService = {
 
     },
     async getPostById(id: number): Promise<IPost | null> {
-        return await postsRepository.getPostById(id)
+        return postsRepository.getPostById(id)
     },
     async createPost(title: string, shortDescription: string, content: string, bloggerId: number): Promise<IPost | null> {
         const blogger = await bloggersService.getBloggerById(bloggerId)
