@@ -6,8 +6,27 @@ import {bloggersCollection, postsCollection} from "../db/db";
 
 
 export const postsRepository = {
-    async getAllPosts(): Promise<IPost[]> {
-        return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
+    async getAllPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId?: number | null): Promise<any> {
+        let filter = bloggerId
+            ? {title: {$regex: searchNameTerm ? searchNameTerm : ""}, bloggerId}
+            : {title: {$regex: searchNameTerm ? searchNameTerm : ""}}
+        const totalCount = await postsCollection.countDocuments(filter)
+        const pagesCount = Math.ceil(totalCount / pageSize)
+        const posts = await postsCollection
+            .find(filter, {projection: {_id: 0}})
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .toArray()
+
+        return {
+            pagesCount,
+            page,
+            pageSize,
+            totalCount,
+            items: posts
+        }
+
+        // return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
     },
     async getPostById(id: number): Promise<IPost | null> {
         return await postsCollection.findOne({id}, {projection: {_id: 0}})

@@ -5,8 +5,8 @@ import {bloggersService} from "./bloggers-service";
 
 
 export const postsService = {
-    async getAllPosts(): Promise<IPost[]> {
-        return postsRepository.getAllPosts()
+    async getAllPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId?: number | null): Promise<IPost[]> {
+        return postsRepository.getAllPosts(page, pageSize, searchNameTerm, bloggerId)
 
     },
     async getPostById(id: number): Promise<IPost | null> {

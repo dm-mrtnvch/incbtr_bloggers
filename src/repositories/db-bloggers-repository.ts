@@ -9,7 +9,6 @@ import e from "express";
 export const bloggersRepository = {
     async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
         const filter = searchNameTerm ? {name: {$regex: searchNameTerm}} : {}
-        // const filter = {name: {$regex: searchNameTerm ? searchNameTerm : ""}}
         console.log(filter)
         const bloggers = await bloggersCollection
             .find(filter, {projection: {_id: 0}})

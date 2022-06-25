@@ -38,6 +38,13 @@ bloggersRouter.get('/:id',
         }
     })
 
+bloggersRouter.get('/:id/posts', async (req, res) => {
+    const {page, pageSize, searchNameTerm} = getPaginationData(req.query)
+    const bloggerId = Number(req.params.id)
+    const posts = await postsService.getAllPosts(page, pageSize, searchNameTerm, bloggerId)
+    res.json(posts)
+})
+
 bloggersRouter.post('',
     authMiddleware,
     checkSchema(bloggersValidationSchema),
