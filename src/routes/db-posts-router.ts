@@ -64,10 +64,13 @@ postsRouter.put('/:postId',
 
 postsRouter.delete('/:postId',
     authMiddleware,
-    postsIdValidationAsync,
-    idValidation,
+    postsIdValidationAsync,q
     async (req: Request, res: Response) => {
         const id = Number(req.params.postId)
-        await postsService.deletePostById(id)
-        res.sendStatus(204)
+        const isDeleted = await postsService.deletePostById(id)
+        if(isDeleted){
+            res.sendStatus(204)
+        } else {
+            res.status(404).json({error: 'error from posts controller'})
+        }
     })
