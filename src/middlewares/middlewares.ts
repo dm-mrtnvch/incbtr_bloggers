@@ -173,8 +173,8 @@ export const paginationValidation = [
 export const bloggersIdValidation = async (req: Request, res: Response, next: NextFunction) => {
     await param('id', 'blogger doesn\'t exist')
         .toInt()
-        .custom(async bloggerId => {
-            const blogger = await bloggersService.getBloggerById(bloggerId) // what solution is correct
+        .custom(async id => {
+            const blogger = await bloggersService.getBloggerById(id) // what solution is correct
             // const blogger = await  bloggersService.checkIfBloggerExist(bloggerId) // this one or previous?
             return (!!blogger) ? Promise.resolve() : Promise.reject()
         }).run(req)

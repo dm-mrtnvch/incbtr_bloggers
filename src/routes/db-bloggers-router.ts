@@ -77,11 +77,11 @@ bloggersRouter.post('/:id/posts',
 bloggersRouter.put('/:id',
     authMiddleware,
     bloggersIdValidation,
-    idValidation,
+    // idValidation,
     checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.bloggerId)
+        const id = Number(req.params.id)
         const {name, youtubeUrl} = req.body
         const isUpdated = await bloggersService.updateBlogger(id, name, youtubeUrl)
         if (isUpdated) {

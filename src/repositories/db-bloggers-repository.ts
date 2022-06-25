@@ -5,7 +5,6 @@ import {bloggersCollection} from "../db/db";
 import e from "express";
 
 
-
 export const bloggersRepository = {
     async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
         const filter = searchNameTerm ? {name: {$regex: searchNameTerm}} : {}
@@ -26,7 +25,7 @@ export const bloggersRepository = {
         }
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {
-        return  bloggersCollection.findOne({id}, {projection: {_id: 0}})
+        return bloggersCollection.findOne({id}, {projection: {_id: 0}})
     },
     async createBlogger(newBlogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(newBlogger)
@@ -37,8 +36,8 @@ export const bloggersRepository = {
         }
     },
     async updateBlogger(id: number, name: string, youtubeUrl: string): Promise<boolean> {
-        const result = await bloggersCollection.updateOne({id}, {$set: {name, youtubeUrl}})
-        return result.matchedCount === 1
+            const result = await bloggersCollection.findOneAndUpdate({id}, {$set: {name, youtubeUrl}})
+            return !!result.ok
     },
     async deleteBloggerById(id: number): Promise<boolean> {
         const result = await bloggersCollection.deleteOne({id})
