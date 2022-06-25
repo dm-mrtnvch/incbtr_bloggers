@@ -12,7 +12,7 @@ export const bloggersService = {
         // return bloggers
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {
-        return bloggersRepository.getBloggerById(id)
+        return   bloggersRepository.getBloggerById(id)
     },
     async createBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger: IBlogger = {

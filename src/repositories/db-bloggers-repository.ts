@@ -8,10 +8,11 @@ import e from "express";
 
 export const bloggersRepository = {
     async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
-        const filter = {name: {$regex: searchNameTerm ? searchNameTerm : ""}}
-
+        const filter = searchNameTerm ? {name: {$regex: searchNameTerm}} : {}
+        // const filter = {name: {$regex: searchNameTerm ? searchNameTerm : ""}}
+        console.log(filter)
         const bloggers = await bloggersCollection
-            .find({}, {projection: {_id: 0}})
+            .find(filter, {projection: {_id: 0}})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .toArray()
@@ -26,8 +27,7 @@ export const bloggersRepository = {
         }
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {
-        const blogger: IBlogger | null =  await bloggersCollection.findOne({id}, {projection: {_id: 0}})
-        return blogger
+        return  bloggersCollection.findOne({id}, {projection: {_id: 0}})
     },
     async createBlogger(newBlogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(newBlogger)

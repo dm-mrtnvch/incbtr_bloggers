@@ -89,11 +89,7 @@ bloggersRouter.delete('/:id',
     idValidation,
     async (req: Request, res: Response) => {
         const id = Number(req.params.id)
-        const isDeleted = await bloggersService.deleteBloggerById(id)
-        if (isDeleted) {
-            res.sendStatus(204)
-        } else {
-            res.sendStatus(404)
-        }
+        await bloggersService.deleteBloggerById(id)
+        res.sendStatus(204)
     })
 
