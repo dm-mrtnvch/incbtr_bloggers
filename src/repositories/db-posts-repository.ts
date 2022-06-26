@@ -3,7 +3,7 @@ import {postsCollection} from "../db/db";
 
 
 export const postsRepository = {
-    async getAllPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId?: number | null): Promise<any> {
+    async getAllPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId?: string | null): Promise<any> {
         let filter = bloggerId
             ? {title: {$regex: searchNameTerm ? searchNameTerm : ""}, bloggerId}
             : {title: {$regex: searchNameTerm ? searchNameTerm : ""}}
@@ -23,7 +23,7 @@ export const postsRepository = {
             items: posts
         }
     },
-    async getPostById(id: number): Promise<IPost | null> {
+    async getPostById(id: string): Promise<IPost | null> {
         return postsCollection.findOne({id}, {projection: {_id: 0}})
     },
     async createPost(newPost: IPost): Promise<IPost> {
@@ -38,7 +38,7 @@ export const postsRepository = {
         }
 
     },
-    async updatePost(id: number, title: string, shortDescription: string, content: string, bloggerId: number): Promise<boolean> {
+    async updatePost(id: string, title: string, shortDescription: string, content: string, bloggerId: string): Promise<boolean> {
         // const blogger: IBlogger | null = await bloggersCollection.findOne({bloggerId})
         // if (blogger) {
         const result = await postsCollection.findOneAndUpdate({id}, {$set: {title, shortDescription, content}})
@@ -47,7 +47,7 @@ export const postsRepository = {
         // }
         // return false
     },
-    async deletePostById(id: number): Promise<boolean> {
+    async deletePostById(id: string): Promise<boolean> {
         const post = await postsCollection.findOne({id})
         if (post) {
             const result = await postsCollection.deleteOne({id})

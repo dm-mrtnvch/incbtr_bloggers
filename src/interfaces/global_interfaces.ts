@@ -1,5 +1,5 @@
 export interface IUnique {
-    id: number
+    id: string
 }
 
 export interface IBlogger extends IUnique {
@@ -11,7 +11,7 @@ export interface IPost extends IUnique {
     title: string
     shortDescription: string
     content: string
-    bloggerId: number
+    bloggerId: string
     bloggerName: string
 }
 

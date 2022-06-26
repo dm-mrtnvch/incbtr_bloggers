@@ -96,7 +96,7 @@ export const postsValidationSchema: Schema = {
         notEmpty: {
             errorMessage: 'bloggerId field can\'t be empty'
         },
-        toInt: true,
+        // toInt: true,
         custom: {
             options: async (id) => {
                 const blogger = await bloggersService.getBloggerById(id)
@@ -171,7 +171,7 @@ export const paginationValidation = [
 // ----- validations -----
 export const bloggersIdValidationAsync = async (req: Request, res: Response, next: NextFunction) => {
     await param('id', 'blogger doesn\'t exist')
-        .toInt()
+        // .toInt()
         .custom(async id => {
             const blogger = await bloggersService.getBloggerById(id) // what solution is correct
             // const blogger = await  bloggersService.checkIfBloggerExist(bloggerId) // this one or previous?
@@ -188,7 +188,7 @@ export const bloggersIdValidationAsync = async (req: Request, res: Response, nex
 
 export const postsIdValidationAsync = async (req: Request, res: Response, next: NextFunction) => {
     await param('id', 'post doesn\'t exist')
-        .toInt()
+        // .toInt()
         .custom(async id => {
             const post = await postsService.getPostById(id)
             return (!!post) ? Promise.resolve() : Promise.reject()

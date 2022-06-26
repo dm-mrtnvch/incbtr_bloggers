@@ -29,7 +29,7 @@ bloggersRouter.get('',
 bloggersRouter.get('/:id',
     // bloggersIdValidationAsync, // is it necessary to validate id in middleware...
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const {id} = req.params
         const blogger = await bloggersService.getBloggerById(id)
         if (blogger) { // as we can validate validate blogger by id here?
             res.json(blogger)
@@ -43,7 +43,7 @@ bloggersRouter.get('/:id/posts',
     async (req, res) => {
         const {page, pageSize} = getPaginationData(req.query)
         const searchNameTerm = getSearchNameTerm(req.query)
-        const id = Number(req.params.id)
+        const {id} = req.params
         const posts = await postsService.getAllPosts(page, pageSize, searchNameTerm, id)
         res.json(posts)
     })
@@ -66,7 +66,7 @@ bloggersRouter.post('/:id/posts',
     // solutions: check each req.body step by step || have two schemas || pass exception in schema (is it possible?) || path: '/:bloggerId/posts'
     validation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const {id} = req.params
         const {title, shortDescription, content} = req.body
         const newPost = await postsService.createPost(title, shortDescription, content, id)
         if (newPost) {
@@ -82,7 +82,7 @@ bloggersRouter.put('/:id',
     checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const {id} = req.params
         const {name, youtubeUrl} = req.body
         const isUpdated = await bloggersService.updateBlogger(id, name, youtubeUrl)
         if (isUpdated) {
@@ -100,7 +100,7 @@ bloggersRouter.delete('/:id',
     authMiddleware,
     bloggersIdValidationAsync, // check blogger here or send 404 in controller?
     async (req: Request, res: Response) => {
-        const id = Number(req.params.id)
+        const {id} = req.params
         await bloggersService.deleteBloggerById(id)
         res.sendStatus(204)
         // works without isDeleted conditional expression

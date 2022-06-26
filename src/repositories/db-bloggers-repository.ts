@@ -23,7 +23,7 @@ export const bloggersRepository = {
             items: bloggers
         }
     },
-    async getBloggerById(id: number): Promise<IBlogger | null> {
+    async getBloggerById(id: string): Promise<IBlogger | null> {
         return bloggersCollection.findOne({id}, {projection: {_id: 0}})
     },
     async createBlogger(newBlogger: IBlogger): Promise<IBlogger> {
@@ -37,12 +37,12 @@ export const bloggersRepository = {
             id: newBlogger.id
         }
     },
-    async updateBlogger(id: number, name: string, youtubeUrl: string): Promise<boolean> {
+    async updateBlogger(id: string, name: string, youtubeUrl: string): Promise<boolean> {
             const result = await bloggersCollection.findOneAndUpdate({id}, {$set: {name, youtubeUrl}})
             // check questions' file in src
             return !!result.ok
     },
-    async deleteBloggerById(id: number): Promise<boolean> {
+    async deleteBloggerById(id: string): Promise<boolean> {
         const result = await bloggersCollection.deleteOne({id})
         return result.deletedCount === 1
     }
