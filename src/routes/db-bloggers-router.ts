@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {checkSchema} from "express-validator";
 import {
     authMiddleware,
-    bloggersIdValidation,
+    bloggersIdValidationAsync,
     bloggersValidationSchema,
     idValidation,
     postsValidationSchemaWithoutBloggerId,
@@ -27,7 +27,7 @@ bloggersRouter.get('',
     })
 
 bloggersRouter.get('/:id',
-    // bloggersIdValidation, // is it necessary to validate id in middleware...
+    // bloggersIdValidationAsync, // is it necessary to validate id in middleware...
     async (req: Request, res: Response) => {
         const id = Number(req.params.id)
         const blogger = await bloggersService.getBloggerById(id)
@@ -39,7 +39,7 @@ bloggersRouter.get('/:id',
     })
 
 bloggersRouter.get('/:id/posts',
-    bloggersIdValidation,
+    bloggersIdValidationAsync,
     async (req, res) => {
         const {page, pageSize} = getPaginationData(req.query)
         const searchNameTerm = getSearchNameTerm(req.query)
@@ -60,7 +60,7 @@ bloggersRouter.post('',
 
 bloggersRouter.post('/:id/posts',
     authMiddleware,
-    bloggersIdValidation,
+    bloggersIdValidationAsync,
     checkSchema(postsValidationSchemaWithoutBloggerId), // now we have two schemas:
     // one with bloggerId (to create post in posts controller), another with bloggerId in params with id name (not bloggerId)
     // solutions: check each req.body step by step || have two schemas || pass exception in schema (is it possible?) || path: '/:bloggerId/posts'
@@ -78,7 +78,7 @@ bloggersRouter.post('/:id/posts',
 
 bloggersRouter.put('/:id',
     authMiddleware,
-    bloggersIdValidation,
+    bloggersIdValidationAsync,
     checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
@@ -90,7 +90,7 @@ bloggersRouter.put('/:id',
         } else {
             res.sendStatus(404)
             // is it necessary conditional expression...
-            // as we will get 404 from bloggersIdValidation
+            // as we will get 404 from bloggersIdValidationAsync
             // we need to return another status for error
         }
     })
@@ -98,8 +98,7 @@ bloggersRouter.put('/:id',
 
 bloggersRouter.delete('/:id',
     authMiddleware,
-    bloggersIdValidation, // check blogger here or send 404 in controller?
-    idValidation,
+    bloggersIdValidationAsync, // check blogger here or send 404 in controller?
     async (req: Request, res: Response) => {
         const id = Number(req.params.id)
         await bloggersService.deleteBloggerById(id)

@@ -1,7 +1,5 @@
-import {check, oneOf, param, Schema, validationResult} from "express-validator";
-import {bloggersRepository} from "../repositories/bloggers-repository";
-import {Request, Response, NextFunction} from "express";
-import {postsRepository} from "../repositories/posts-repository";
+import {check, param, Schema, validationResult} from "express-validator";
+import {NextFunction, Request, Response} from "express";
 import {urlPattern} from "../helpers/utils";
 import {IError} from "../interfaces/global_interfaces";
 import {AUTHORISATION, CREDENTIALS} from "../config/constants";
@@ -109,7 +107,6 @@ export const postsValidationSchema: Schema = {
     }
 }
 
-
 export const postsValidationSchemaWithoutBloggerId: Schema = {
     title: {
         in: ['body'],
@@ -156,15 +153,6 @@ export const postsValidationSchemaWithoutBloggerId: Schema = {
     }
 }
 
-export const paginationValidationSchema: Schema = {
-    PageNumber: {
-        in: ['query'],
-        exists: {
-            errorMessage: ''
-        }
-    }
-}
-
 export const paginationValidation = [
     check('page')
         .optional({checkFalsy: true})
@@ -181,7 +169,7 @@ export const paginationValidation = [
 ]
 
 // ----- validations -----
-export const bloggersIdValidation = async (req: Request, res: Response, next: NextFunction) => {
+export const bloggersIdValidationAsync = async (req: Request, res: Response, next: NextFunction) => {
     await param('id', 'blogger doesn\'t exist')
         .toInt()
         .custom(async id => {
@@ -198,10 +186,6 @@ export const bloggersIdValidation = async (req: Request, res: Response, next: Ne
     }
 }
 
-export const postsIdValidation = param('postId', "post doesn't exist")
-    .toInt()
-    .custom(async id => await postsRepository.getPostById(id))
-
 export const postsIdValidationAsync = async (req: Request, res: Response, next: NextFunction) => {
     await param('id', 'post doesn\'t exist')
         .toInt()
@@ -217,10 +201,6 @@ export const postsIdValidationAsync = async (req: Request, res: Response, next: 
         next()
     }
 }
-
-
-
-export const oneOfIdValidation = oneOf([postsIdValidation])
 
 export const idValidation = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)

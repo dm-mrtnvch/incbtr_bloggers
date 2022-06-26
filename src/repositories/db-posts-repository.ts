@@ -1,8 +1,5 @@
-import {posts} from "../db/mock_data";
-import {IBlogger, IPost} from "../interfaces/global_interfaces";
-import {findObjectById} from "../helpers/utils";
-import {bloggersRepository} from "./bloggers-repository";
-import {bloggersCollection, postsCollection} from "../db/db";
+import {IPost} from "../interfaces/global_interfaces";
+import {postsCollection} from "../db/db";
 
 
 export const postsRepository = {

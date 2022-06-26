@@ -1,13 +1,6 @@
 import {Request, Response, Router} from "express";
 import {IPost} from "../interfaces/global_interfaces";
-import {postsRepository} from "../repositories/posts-repository";
-import {
-    authMiddleware,
-    idValidation, oneOfIdValidation,
-    postsIdValidation, postsIdValidationAsync,
-    postsValidationSchema,
-    validation
-} from "../middlewares/middlewares";
+import {authMiddleware, postsIdValidationAsync, postsValidationSchema, validation} from "../middlewares/middlewares";
 import {checkSchema} from "express-validator";
 import {postsService} from "../domain/posts-service";
 import {getPaginationData, getSearchNameTerm} from "../helpers/utils";
@@ -23,11 +16,10 @@ postsRouter.get('',
         res.json(posts)
     })
 
-postsRouter.get('/:postId',
-    oneOfIdValidation,
-    idValidation,
+postsRouter.get('/:id',
+    postsIdValidationAsync,
     async (req, res) => {
-        const id = Number(req.params.postId)
+        const id = Number(req.params.id)
         const post = await postsService.getPostById(id)
         res.json(post)
     })
@@ -46,14 +38,13 @@ postsRouter.post('',
         }
     })
 
-postsRouter.put('/:postId',
+postsRouter.put('/:id',
     authMiddleware,
-    oneOfIdValidation,
-    idValidation,
+    postsIdValidationAsync,
     checkSchema(postsValidationSchema),
     validation,
     async (req: Request, res: Response) => {
-        const id = Number(req.params.postId)
+        const id = Number(req.params.id)
         const {title, shortDescription, content, bloggerId} = req.body
         const isUpdated = await postsService.updatePost(id, title, shortDescription, content, bloggerId)
         if (isUpdated) {
@@ -66,7 +57,6 @@ postsRouter.put('/:postId',
 postsRouter.delete('/:id',
     authMiddleware,
     postsIdValidationAsync,
-    idValidation,
     async (req: Request, res: Response) => {
         const id = Number(req.params.id)
         await postsService.deletePostById(id)
