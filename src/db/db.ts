@@ -1,5 +1,5 @@
 import {MongoClient} from 'mongodb'
-import {IBlogger, IPost} from "../interfaces/global_interfaces";
+import {IBlogger, IPost, IUser} from "../interfaces/global_interfaces";
 import {config} from "dotenv";
 config()
 
@@ -10,6 +10,7 @@ const db = client.db("bloggers")
 
 export const bloggersCollection = db.collection<IBlogger>('bloggers')
 export const postsCollection = db.collection<IPost>('posts')
+export const usersCollection = db.collection<IUser>('users')
 
 export async function runDb() {
     try {

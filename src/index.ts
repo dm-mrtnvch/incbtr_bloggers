@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import {runDb} from "./db/db";
 import {bloggersRouter} from "./routes/db-bloggers-router";
 import {postsRouter} from "./routes/db-posts-router";
+import {usersRouter} from "./routes/users-router";
 // import {config} from "dotenv";
 // config()
 
@@ -15,7 +16,7 @@ app.get('', (req, res) => {
 })
 app.use('/posts', postsRouter)
 app.use('/bloggers', bloggersRouter)
-app
+app.use('/users', usersRouter)
 
 
 

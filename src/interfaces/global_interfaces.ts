@@ -15,6 +15,11 @@ export interface IPost extends IUnique {
     bloggerName: string
 }
 
+export interface IUser {
+    login: string
+    password: string
+}
+
 export interface IError {
     message: string
     field: string
