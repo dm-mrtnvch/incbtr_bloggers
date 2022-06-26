@@ -20,7 +20,11 @@ export const usersRepository = {
     },
     async createUser(user: IUser): Promise<IUser | null>{
         await usersCollection.insertOne(user)
-        return user
+
+        return {
+            id: user.id,
+            login: user.login
+        }
     },
    async deleteUser(id: string){
         const result = await usersCollection.deleteOne({id})

@@ -17,7 +17,7 @@ usersRouter.post('',
     async (req: Request, res: Response) => {
         const {login, password} = req.body
         const user = await usersService.createUser(login, password)
-        res.send(201).json(user)
+        res.status(201).json(user)
 
 
     })
@@ -26,7 +26,7 @@ usersRouter.delete('/:id',
     async (req, res) => {
         const {id} = req.params
         const isDeleted = await usersService.deleteUser(id)
-        if(isDeleted){
+        if (isDeleted) {
             res.sendStatus(204)
         } else {
             res.sendStatus(404)
