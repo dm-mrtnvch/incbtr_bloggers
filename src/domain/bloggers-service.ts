@@ -8,11 +8,10 @@ import {bloggersRepository} from "../repositories/db-bloggers-repository";
 
 export const bloggersService = {
     async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<IBlogger[]> {
-        return bloggersRepository.getAllBloggers(page, pageSize, searchNameTerm) // works without await. why?
-        // return bloggers
+        return bloggersRepository.getAllBloggers(page, pageSize, searchNameTerm)
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {
-        return   bloggersRepository.getBloggerById(id)
+        return bloggersRepository.getBloggerById(id)
     },
     async createBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger: IBlogger = {
@@ -28,7 +27,7 @@ export const bloggersService = {
     async deleteBloggerById(id: number): Promise<boolean> {
         return bloggersRepository.deleteBloggerById(id)
     },
-    async checkIfBloggerExist (id: number) {
+    async checkIfBloggerExist(id: number) {
         return !!await bloggersRepository.getBloggerById(id)
     }
 }

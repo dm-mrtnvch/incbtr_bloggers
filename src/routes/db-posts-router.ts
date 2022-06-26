@@ -10,14 +10,15 @@ import {
 } from "../middlewares/middlewares";
 import {checkSchema} from "express-validator";
 import {postsService} from "../domain/posts-service";
-import {getPaginationData} from "../helpers/utils";
+import {getPaginationData, getSearchNameTerm} from "../helpers/utils";
 
 
 export const postsRouter = Router()
 
 postsRouter.get('',
     async (req, res) => {
-        const {page, pageSize, searchNameTerm} = getPaginationData(req.query)
+        const {page, pageSize} = getPaginationData(req.query)
+        const searchNameTerm = getSearchNameTerm(req.query)
         const posts: IPost[] = await postsService.getAllPosts(page, pageSize, searchNameTerm)
         res.json(posts)
     })

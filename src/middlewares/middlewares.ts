@@ -156,6 +156,14 @@ export const postsValidationSchemaWithoutBloggerId: Schema = {
     }
 }
 
+export const paginationValidationSchema: Schema = {
+    PageNumber: {
+        in: ['query'],
+        exists: {
+            errorMessage: ''
+        }
+    }
+}
 
 export const paginationValidation = [
     check('page')

@@ -1,14 +1,10 @@
-import {bloggers} from "../db/mock_data";
 import {IBlogger} from "../interfaces/global_interfaces";
-import {findObjectById} from "../helpers/utils";
 import {bloggersCollection} from "../db/db";
-import e from "express";
 
 
 export const bloggersRepository = {
     async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
         const filter = searchNameTerm ? {name: {$regex: searchNameTerm}} : {}
-        console.log(filter)
         const bloggers = await bloggersCollection
             .find(filter, {projection: {_id: 0}})
             .skip((page - 1) * pageSize)
@@ -16,6 +12,7 @@ export const bloggersRepository = {
             .toArray()
         const totalCount = await bloggersCollection.countDocuments(filter)
         const pagesCount = Math.ceil(totalCount / pageSize)
+
         return {
             pagesCount,
             page,
