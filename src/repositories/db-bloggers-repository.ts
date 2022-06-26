@@ -1,9 +1,11 @@
-import {IBlogger} from "../interfaces/global_interfaces";
+import {IBlogger, IEntityWithPagination} from "../interfaces/global_interfaces";
 import {bloggersCollection} from "../db/db";
 
 
+
+
 export const bloggersRepository = {
-    async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<any> {
+    async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<IEntityWithPagination<IBlogger[]>> {
         const filter = searchNameTerm ? {name: {$regex: searchNameTerm}} : {}
         const bloggers = await bloggersCollection
             .find(filter, {projection: {_id: 0}})
@@ -14,9 +16,9 @@ export const bloggersRepository = {
         const pagesCount = Math.ceil(totalCount / pageSize)
 
         return {
-            pagesCount,
             page,
             pageSize,
+            pagesCount,
             totalCount,
             items: bloggers
         }
@@ -26,6 +28,9 @@ export const bloggersRepository = {
     },
     async createBlogger(newBlogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(newBlogger)
+        // is it necessary to check was blogger added?
+        // await bloggersCollection.insertOne(newBlogger) returns
+        // {acknowledged: true, insertedId: new ObjectId("62b865c7267996818d953009")}
         return {
             name: newBlogger.name,
             youtubeUrl: newBlogger.youtubeUrl,
@@ -34,6 +39,7 @@ export const bloggersRepository = {
     },
     async updateBlogger(id: number, name: string, youtubeUrl: string): Promise<boolean> {
             const result = await bloggersCollection.findOneAndUpdate({id}, {$set: {name, youtubeUrl}})
+            // check questions' file in src
             return !!result.ok
     },
     async deleteBloggerById(id: number): Promise<boolean> {

@@ -19,3 +19,11 @@ export interface IError {
     message: string
     field: string
 }
+
+export interface IEntityWithPagination<T> {
+    page: number
+    pageSize: number
+    pagesCount: number
+    totalCount: number
+    items: T
+}

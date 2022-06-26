@@ -1,13 +1,9 @@
-import {bloggers} from "../db/mock_data";
-import {IBlogger} from "../interfaces/global_interfaces";
-import {findObjectById} from "../helpers/utils";
-import {bloggersCollection} from "../db/db";
-import e from "express";
+import {IBlogger, IEntityWithPagination} from "../interfaces/global_interfaces";
 import {bloggersRepository} from "../repositories/db-bloggers-repository";
 
 
 export const bloggersService = {
-    async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<IBlogger[]> {
+    async getAllBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<IEntityWithPagination<IBlogger[]>> {
         return bloggersRepository.getAllBloggers(page, pageSize, searchNameTerm)
     },
     async getBloggerById(id: number): Promise<IBlogger | null> {

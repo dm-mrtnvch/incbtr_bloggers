@@ -22,6 +22,7 @@ bloggersRouter.get('',
         const {page, pageSize} = getPaginationData(req.query)
         const searchNameTerm = getSearchNameTerm(req.query)
         const bloggers = await bloggersService.getAllBloggers(page, pageSize, searchNameTerm)
+        // is typization necessary? const bloggers: IEntityWithPagination<IBlogger[]> = ...
         res.json(bloggers) // what happens if we don't get bloggers?
     })
 
@@ -78,7 +79,6 @@ bloggersRouter.post('/:id/posts',
 bloggersRouter.put('/:id',
     authMiddleware,
     bloggersIdValidation,
-    // idValidation,
     checkSchema(bloggersValidationSchema),
     validation,
     async (req: Request, res: Response) => {
@@ -88,7 +88,10 @@ bloggersRouter.put('/:id',
         if (isUpdated) {
             res.sendStatus(204)
         } else {
-            res.sendStatus(404)  // ?
+            res.sendStatus(404)
+            // is it necessary conditional expression...
+            // as we will get 404 from bloggersIdValidation
+            // we need to return another status for error
         }
     })
 
@@ -101,5 +104,6 @@ bloggersRouter.delete('/:id',
         const id = Number(req.params.id)
         await bloggersService.deleteBloggerById(id)
         res.sendStatus(204)
+        // works without isDeleted conditional expression
     })
 

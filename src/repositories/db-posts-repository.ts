@@ -25,13 +25,11 @@ export const postsRepository = {
             totalCount,
             items: posts
         }
-
-        // return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
     },
     async getPostById(id: number): Promise<IPost | null> {
         return postsCollection.findOne({id}, {projection: {_id: 0}})
     },
-    async createPost(newPost: IPost, bloggerId: number): Promise<IPost> {
+    async createPost(newPost: IPost): Promise<IPost> {
         await postsCollection.insertOne(newPost)
         return {
             id: newPost.id,

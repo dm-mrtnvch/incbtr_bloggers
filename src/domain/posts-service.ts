@@ -7,7 +7,6 @@ import {bloggersService} from "./bloggers-service";
 export const postsService = {
     async getAllPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId?: number | null): Promise<IPost[]> {
         return postsRepository.getAllPosts(page, pageSize, searchNameTerm, bloggerId)
-
     },
     async getPostById(id: number): Promise<IPost | null> {
         return postsRepository.getPostById(id)
@@ -24,7 +23,7 @@ export const postsService = {
                 bloggerId,
                 bloggerName: blogger.name
             }
-            return await postsRepository.createPost(newPost, bloggerId)
+            return postsRepository.createPost(newPost)
         } else {
             return null
         }
