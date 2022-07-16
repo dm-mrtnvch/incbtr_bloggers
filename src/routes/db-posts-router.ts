@@ -1,9 +1,10 @@
 import {Request, Response, Router} from "express";
 import {IPost} from "../interfaces/global_interfaces";
 import {authMiddleware, postsIdValidationAsync, postsValidationSchema, validation} from "../middlewares/middlewares";
-import {checkSchema} from "express-validator";
+import {body, checkSchema} from "express-validator";
 import {postsService} from "../domain/posts-service";
 import {getPaginationData, getSearchNameTerm} from "../helpers/utils";
+import {commentsService} from "../domain/comments-service";
 
 
 export const postsRouter = Router()
@@ -68,3 +69,55 @@ postsRouter.delete('/:id',
         //     res.status(404).json({error: 'error from posts controller'})
         // }
     })
+
+const contentValidationComments = body("content")
+    .exists()
+    .trim()
+    .notEmpty()
+    .isLength({ min: 20, max: 300 });
+
+postsRouter.post(
+    "/:postId/comments",
+    authMiddleware,
+    contentValidationComments,
+    validation,
+    async (req: Request, res: Response) => {
+        // const content = req.body.content;
+        // const userId = req.user?.id;
+        // const userLogin = req.user?.accountData.login;
+        // const postId = req.params.postId;
+        //
+        // if (!userId || !userLogin) {
+        //     return res.sendStatus(401);
+        // }
+        //
+        // const findPost = await postsService.getPostById(postId);
+        // if (!findPost) {
+        //     res.sendStatus(404);
+        // } else {
+        //     const newComment = await commentsService.createComments(
+        //         userId,
+        //         userLogin,
+        //         postId,
+        //         content
+        //     );
+        //     res.status(201).send(newComment);
+        // }
+    }
+);
+postsRouter.get("/:postId/comments", async (req: Request, res: Response) => {
+    const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10;
+    const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1;
+    const postId = req.params.postId;
+    const post = await postsService.getPostById(postId);
+    if (!post) {
+        return res.sendStatus(404);
+    }
+    const getComment = await commentsService.getCommentsPost(
+        pageSize,
+        pageNumber,
+        postId
+    );
+
+    res.status(200).send(getComment);
+});

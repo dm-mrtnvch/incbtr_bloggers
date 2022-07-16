@@ -16,10 +16,8 @@ usersRouter.post('',
     // authMiddleware,
     async (req: Request, res: Response) => {
         const {login, password} = req.body
-        const user = await usersService.createUser(login, password)
-        res.status(201).json(user)
-
-
+        const newUser = await usersService.createUser(login, password)
+        res.status(201).json(newUser)
     })
 
 usersRouter.delete('/:id',
@@ -32,3 +30,4 @@ usersRouter.delete('/:id',
             res.sendStatus(404)
         }
     })
+

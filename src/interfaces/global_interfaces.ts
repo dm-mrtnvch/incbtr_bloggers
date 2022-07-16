@@ -17,7 +17,9 @@ export interface IPost extends IUnique {
 
 export interface IUser extends IUnique{
     login: string
-    password?: string
+    // password?: string
+    passwordHash: string
+    createdAt: Date
 }
 
 export interface IError {

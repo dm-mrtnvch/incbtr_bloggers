@@ -18,36 +18,22 @@ export const usersRepository = {
             items: users
         }
     },
-    async createUser(user: IUser): Promise<IUser | null>{
+    async createUser(user: IUser): Promise<IUser>{
         await usersCollection.insertOne(user)
 
         return {
             id: user.id,
-            login: user.login
+            login: user.login,
+            passwordHash: user.passwordHash,
+            createdAt: user.createdAt
         }
     },
    async deleteUser(id: string){
         const result = await usersCollection.deleteOne({id})
         return result.deletedCount === 1
+    },
+    async findByLogin(login: string){
+        const user = await usersCollection.findOne({login})
+        return user
     }
 }
-// {
-//     let filter = bloggerId
-//         ? {title: {$regex: searchNameTerm ? searchNameTerm : ""}, bloggerId}
-//         : {title: {$regex: searchNameTerm ? searchNameTerm : ""}}
-//     const totalCount = await postsCollection.countDocuments(filter)
-//     const pagesCount = Math.ceil(totalCount / pageSize)
-//     const posts = await postsCollection
-//         .find(filter, {projection: {_id: 0}})
-//         .skip((page - 1) * pageSize)
-//         .limit(pageSize)
-//         .toArray()
-//
-//     return {
-//         pagesCount,
-//         page,
-//         pageSize,
-//         totalCount,
-//         items: posts
-//     }
-// }
