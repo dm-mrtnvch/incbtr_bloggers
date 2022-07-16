@@ -9,7 +9,16 @@ usersRouter.get('',
     async (req, res) => {
         const {page, pageSize} = getPaginationData(req.query)
         const users = await usersService.getUsers(page, pageSize)
-        res.json(users)
+        res.json({
+            page,
+            pageSize,
+            pagesCount: users.pagesCount,
+            totalCount: users.totalCount,
+            items: users.items.map(u => ({
+                id: u.id,
+                login: u.login
+            }))
+        })
     })
 
 usersRouter.post('',

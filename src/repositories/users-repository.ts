@@ -6,7 +6,7 @@ export const usersRepository = {
         const totalCount = await usersCollection.countDocuments()
         const pagesCount = Math.ceil(totalCount / pageSize)
         const users = await usersCollection
-            .find({}, {projection: {_id: 0, password: 0}})
+            .find({}, {projection: {_id: 0}})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .toArray()
